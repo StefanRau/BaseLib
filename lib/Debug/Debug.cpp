@@ -16,7 +16,7 @@ static Debug *gInstance = nullptr;
 
 Debug::Debug()
 {
-	Serial.begin(DEBUG_APPLICATION);
+	Serial.begin(9600);
 	delay(10);
 	// That does not work using text objects, because we would get a circular reference there
 	Serial.println("Start Debugger");
