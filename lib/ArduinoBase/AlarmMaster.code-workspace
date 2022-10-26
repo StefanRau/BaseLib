@@ -1,0 +1,25 @@
+{
+	"folders": [
+		{
+			"name": "AlarmMaster",
+			"path": "../../../../../Users/d028312/OneDrive - SAP SE/Documents/PlatformIO/Projects/AlarmMaster"
+		},
+		{
+			"name": "AlarmSensor",
+			"path": "../../../../../Users/d028312/OneDrive - SAP SE/Documents/PlatformIO/Projects/AlarmSensor"
+		},
+		{
+			"name": "BaseLib",
+			"path": "../.."
+		},
+		{
+			"name": "Arduino VS Code",
+			"path": "../../../../../Stefan/Backup/Projekte/Frequency Counter/V1.0/Arduino VS Code"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"thread": "cpp"
+		}
+	}
+}
