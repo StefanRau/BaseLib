@@ -62,7 +62,7 @@ private:
     void (*_mCallback)();                           // Address of the function implementing the task handler
 
 public:
-    static Task *GetNewTask(eTaskType iTaskType, int iTicks, void (*iCallback)());
+    static Task *GetNewTask(eTaskType iTaskType, int iTicks, void (*iCallback)(void));
 
     /// <summary>
     /// Central task loop triggered by a cyclic timer event

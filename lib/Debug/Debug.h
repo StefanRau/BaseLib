@@ -14,14 +14,16 @@
 #endif
 
 #define DebugPrint(Text) Debug::GetInstance()->Print(Text)
-#define DebugMethodCalls(Text) Debug::GetInstance()->Print(Text)
-#define DebugInstantiation(Text) Debug::GetInstance()->Print(Text)
+#define DebugPrintLn(Text) Debug::GetInstance()->PrintLn(Text)
+#define DebugMethodCalls(Text) Debug::GetInstance()->PrintLn(Text)
+#define DebugInstantiation(Text) Debug::GetInstance()->PrintLn(String("New ") + Text)
 #define DebugPrintFromTask(Text) Debug::GetInstance()->PrintFromTask(Text)
 #define DebugLoop() Debug::GetInstance()->loop()
 
 #else
 
 #define DebugPrint(Text)
+#define DebugPrintLn(Text)
 #define DebugMethodCalls(Text)
 #define DebugInstantiation(Text)
 #define DebugPrintFromTask(Text)
@@ -57,6 +59,24 @@ public:
     /// </summary>
     /// <param name="iOutput">Text to write</param>
     void Print(String iOutput);
+
+    /// <summary>
+    /// Writes debugging text to output
+    /// </summary>
+    /// <param name="iOutput">Text to write</param>
+    void Print(const Printable &iOutput);
+
+    /// <summary>
+    /// Writes debugging text to output with line break
+    /// </summary>
+    /// <param name="iOutput">Text to write</param>
+    void PrintLn(String iOutput);
+
+    /// <summary>
+    /// Writes debugging text to output with line break
+    /// </summary>
+    /// <param name="iOutput">Text to write</param>
+    void PrintLn(const Printable &iOutput);
 
     /// <summary>
     /// Writes debugging text into buffer

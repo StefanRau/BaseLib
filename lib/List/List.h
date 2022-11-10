@@ -25,9 +25,16 @@ public:
 /// </summary>
 class ListCollection
 {
-public:
+private:
 	ListCollection();
 	~ListCollection();
+
+public:
+    /// <summary>
+    /// Gets a new instance of this class.
+    /// </summary>
+    /// <returns>Instance of this class</returns>
+    static ListCollection *GetInstance();
 
 	/// <summary>
 	/// Adds an object to the list

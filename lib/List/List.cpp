@@ -9,7 +9,7 @@
 
 ListCollection::ListCollection()
 {
-	DebugInstantiation("New ListCollection");
+	DebugInstantiation("ListCollection");
 }
 
 ListCollection::~ListCollection()
@@ -17,11 +17,16 @@ ListCollection::~ListCollection()
 	// todo: destroy all list objects and their contained content objects
 }
 
+ListCollection *ListCollection::GetInstance()
+{
+    return new ListCollection();
+}
+
 void ListCollection::Add(void *iObject)
 {
-	ListElement *lNewElement;
+	DebugPrintLn("ListCollection new Entry");
 
-	DebugPrint("ListCollection new Entry");
+	ListElement *lNewElement;
 
 	lNewElement = new ListElement();
 	lNewElement->_mObject = iObject;

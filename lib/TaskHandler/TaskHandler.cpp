@@ -120,7 +120,7 @@ Task::~Task()
 {
 }
 
-Task *Task::GetNewTask(eTaskType iTaskType, int iTicks, void (*iCallback)())
+Task *Task::GetNewTask(eTaskType iTaskType, int iTicks, void (*iCallback)(void))
 {
 	Task *lTask;
 
