@@ -65,7 +65,7 @@ TaskHandler::TaskHandler()
 {
 	DebugInstantiation("New TaskHandler");
 
-	_mTaskList = new ListCollection();
+	_mTaskList = ListCollection::GetInstance();
 
 	// Initialize timer
 #ifdef ARDUINO_AVR_NANO_EVERY
