@@ -1,9 +1,16 @@
 #include <Arduino.h>
+#include "Application.h"
 
-void setup() {
-  // put your setup code here, to run once:
+Application *gApplication = nullptr;
+
+void setup()
+{
+  DebugInstantiation("Start Application");
+  gApplication = Application::GetInstance();
+  gApplication->setup();
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
+void loop()
+{
+  gApplication->loop();
 }
