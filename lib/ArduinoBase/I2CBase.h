@@ -39,7 +39,7 @@ public:
 	{
 		int SettingsAddress;   // EEPROM address of the setting
 		int NumberOfSettings;  // number of setting entries in EEPROM
-		short I2CAddress;	   // I2C address of connectied device
+		short I2CAddress;	   // I2C address of connected device
 	};
 
 private:

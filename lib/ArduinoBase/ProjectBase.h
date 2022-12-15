@@ -11,15 +11,9 @@
 
 #ifdef EXTERNAL_EEPROM
 #include <I2C_eeprom.h>
-#endif
-
-#ifdef ARDUINO_AVR_NANO_EVERY
-#include <EEPROM.h>
 #else
-#ifndef EXTERNAL_EEPROM
 #define NO_EEPROM
 #warning "No storage for settings"
-#endif
 #endif
 
 #include "Debug.h"

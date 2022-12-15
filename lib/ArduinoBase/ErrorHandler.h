@@ -106,6 +106,9 @@ public:
 #ifdef ARDUINO_ARDUINO_NANO33BLE
 #define ErrorHandlerStartAddress 0x0100 // 1st address for logging
 #endif
+#ifdef ARDUINO_NANO_RP2040_CONNECT
+#define ErrorHandlerStartAddress 0x0100 // 1st address for logging
+#endif
 
 class ErrorHandler : public I2CBase
 {

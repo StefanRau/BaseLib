@@ -1,16 +1,23 @@
-#include <Arduino.h>
-#include "Application.h"
+// main template
+// 20.11.2022
+// Stefan Rau
+// History
+// 20.11.2022: 1st version - Stefan Rau
+// That is a template file - decomment following lines
 
-Application *gApplication = nullptr;
+// #include <Arduino.h>
+// #include "Application.h"
 
-void setup()
-{
-  DebugInstantiation("Start Application");
-  gApplication = Application::GetInstance();
-  gApplication->setup();
-}
+// Application *gApplication = nullptr;
 
-void loop()
-{
-  gApplication->loop();
-}
+// void setup()
+// {
+//   DebugInstantiation("Start Application");
+//   gApplication = Application::GetInstance();
+//   gApplication->setup();
+// }
+
+// void loop()
+// {
+//   gApplication->loop();
+// }

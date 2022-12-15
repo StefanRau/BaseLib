@@ -14,6 +14,7 @@
 // 09.08.2022: add ARDUINO NANO 33 BLE - Stefan Rau
 // 26.09.2022: EXTERNAL_EEPROM defined in platform.ini - Stefan Rau
 // 26.09.2022: DEBUG_APPLICATION defined in platform.ini - Stefan Rau
+// 02.12.2022: extended by ARDUINO_NANO_RP2040_CONNECT - Stefan Rau
 
 #include "ProjectBase.h"
 
@@ -123,16 +124,11 @@ void ProjectBase::SetSetting(int iSettingNumber, char iValue)
     // Settings address and value must be valid
     if ((_mSettingAdddress >= 0) && (iSettingNumber > 0) && (iSettingNumber <= _mNumberOfSettings) && (iValue != cNullSetting))
     {
-#ifdef ARDUINO_AVR_NANO_EVERY
-        EEPROM.update(_mSettingAdddress + iSettingNumber - 1, iValue);
-#endif
 #ifdef EXTERNAL_EEPROM
-#if defined(ARDUINO_SAMD_NANO_33_IOT) or defined(ARDUINO_ARDUINO_NANO33BLE)
         if (gI2CGlobalEEPROM != nullptr)
         {
             gI2CGlobalEEPROM->updateByte(_mSettingAdddress + iSettingNumber - 1, iValue);
         }
-#endif
 #endif
     }
     DebugPrint("Set Setting: " + String(_mSettingAdddress) + ", " + String(iValue));
@@ -146,16 +142,11 @@ char ProjectBase::GetSetting(int iSettingNumber)
 #ifndef NO_EEPROM
     if ((_mSettingAdddress >= 0) && (iSettingNumber > 0) && (iSettingNumber <= _mNumberOfSettings))
     {
-#ifdef ARDUINO_AVR_NANO_EVERY
-        lSetting = EEPROM.read(_mSettingAdddress + iSettingNumber - 1);
-#endif
 #ifdef EXTERNAL_EEPROM
-#if defined(ARDUINO_SAMD_NANO_33_IOT) or defined(ARDUINO_ARDUINO_NANO33BLE)
         if (gI2CGlobalEEPROM != nullptr)
         {
             lSetting = gI2CGlobalEEPROM->readByte(_mSettingAdddress + iSettingNumber - 1);
         }
-#endif
 #endif
     }
 
