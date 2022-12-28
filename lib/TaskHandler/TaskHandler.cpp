@@ -9,6 +9,8 @@
 // 08.08.2022: Switch to ARDUINO NANO IOT due to memory issues - Stefan Rau
 // 21.09.2022: use GetInstance instead of Get<Typename> - Stefan Rau
 // 26.09.2022: DEBUG_APPLICATION defined in platform.ini - Stefan Rau
+// 21.12.2022: extend destructor - Stefan Rau
+// 28.12.2022: fix bug with timer interrupt for NANO 33 IOT - Stefan Rau
 
 #include "TaskHandler.h"
 #include <Arduino.h>
@@ -23,21 +25,33 @@
 #define USE_TIMER_3 false
 #endif
 
+#ifdef ARDUINO_SAMD_NANO_33_IOT
+#define USING_TIMER_TC3         true      // Only TC3 can be used for SAMD51
+#define USING_TIMER_TC4         false     // Not to use with Servo library
+#define USING_TIMER_TC5         false
+#define USING_TIMER_TCC         false
+#define USING_TIMER_TCC1        false
+#define USING_TIMER_TCC2        false     // Don't use this, can crash on some boards
+#endif
+
 #include <TimerInterrupt_Generic.h>
 
 #ifdef ARDUINO_AVR_NANO_EVERY
+#warning ARDUINO_AVR_NANO_EVERY
 #define TIMER1_TICKS_FOR_1_MS 1
 #define lTimer ITimer1
 #endif
 
 #ifdef ARDUINO_SAMD_NANO_33_IOT
+#warning ARDUINO_SAMD_NANO_33_IOT
 #define TIMER1_TICKS_FOR_1_MS 1000
 static SAMDTimer lTimer(TIMER_TC3);
 #endif
 
 #ifdef ARDUINO_ARDUINO_NANO33BLE
+#warning ARDUINO_ARDUINO_NANO33BLE
 #define TIMER1_TICKS_FOR_1_MS 1000
-static NRF52_MBED_Timer lTimer(NRF_TIMER_1);
+static NRF52_MBED_Timer lTimer(NRF_TIMER_3);
 #endif
 
 static TaskHandler *gInstance = nullptr;
@@ -57,13 +71,14 @@ void TaskDispatcher()
 			lTaskIterator->Process();
 		}
 	} while (lTaskIterator != nullptr);
+
 }
 
 /////////////////////////////////////////////////////////////
 
 TaskHandler::TaskHandler()
 {
-	DebugInstantiation("New TaskHandler");
+	DebugInstantiation("TaskHandler");
 
 	_mTaskList = ListCollection::GetInstance();
 
@@ -75,6 +90,9 @@ TaskHandler::TaskHandler()
 
 TaskHandler::~TaskHandler()
 {
+	DebugDestroy("TaskHandler");
+	delete _mTaskList;
+	// delete lTimer;
 }
 
 TaskHandler *TaskHandler::GetInstance()
@@ -84,10 +102,17 @@ TaskHandler *TaskHandler::GetInstance()
 	return gInstance;
 }
 
-void TaskHandler::SetCycleTimeInMs(unsigned long iCycleTimeInMs)
+void TaskHandler::SetCycleTimeInMs(unsigned int iCycleTimeInMs)
 {
 	// Initialize hardware timer
-	lTimer.attachInterruptInterval(iCycleTimeInMs * TIMER1_TICKS_FOR_1_MS, TaskDispatcher);
+	if (lTimer.attachInterruptInterval((float)iCycleTimeInMs * TIMER1_TICKS_FOR_1_MS, TaskDispatcher))
+	{
+		DebugPrintLn("Task timer set");
+	}
+	else
+	{
+		DebugPrintLn("Setting Task timer failed");
+	};
 }
 
 ListCollection *TaskHandler::GetTaskList()
@@ -99,7 +124,7 @@ ListCollection *TaskHandler::GetTaskList()
 
 Task::Task(Task::eTaskType iTaskType, int iTicks, void (*iCallback)())
 {
-	DebugInstantiation("New Task: iTaskType=" + String() + ",iTicks=" + String(iTicks) + ",iCallback=" + String(iCallback == nullptr ? "nullptr" : "valid"));
+	DebugInstantiation("Task: iTaskType=" + String(iTaskType) + ",iTicks=" + String(iTicks) + ",iCallback=" + String(iCallback == nullptr ? "nullptr" : "valid"));
 
 	// Initialize task
 	_mTaskType = iTaskType;
@@ -118,6 +143,7 @@ Task::Task(Task::eTaskType iTaskType, int iTicks, void (*iCallback)())
 
 Task::~Task()
 {
+	DebugDestroy("Task");
 }
 
 Task *Task::GetNewTask(eTaskType iTaskType, int iTicks, void (*iCallback)(void))
