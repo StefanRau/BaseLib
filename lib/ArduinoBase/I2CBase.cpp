@@ -5,6 +5,7 @@
 // 18.10.2021: 1st version - Stefan Rau
 // 27.10.2021: Constructor requires structure - Stefan Rau
 // 20.06.2022: Debug instantiation of classes - Stefan Rau
+// 21.12.2022: extend destructor - Stefan Rau
 
 #include "I2CBase.h"
 
@@ -13,11 +14,12 @@
 /// </summary>
 TextI2CBase::TextI2CBase() : TextBase(-1)
 {
-    DebugInstantiation("New TextI2CBase");
+    DebugInstantiation("TextI2CBase");
 }
 
 TextI2CBase::~TextI2CBase()
 {
+    DebugDestroy("TextI2CBase");
 }
 
 String TextI2CBase::GetObjectName()
@@ -49,7 +51,7 @@ String TextI2CBase::ModuleNotInitialized()
 
 I2CBase::I2CBase(sInitializeModule iInitializeModule) : ProjectBase(iInitializeModule.SettingsAddress, iInitializeModule.NumberOfSettings)
 {
-    DebugInstantiation("New I2CBase: iInitializeModule[SettingsAddress, NumberOfSettings, I2CAddress]=[" + String(iInitializeModule.SettingsAddress) + ", " + String(iInitializeModule.NumberOfSettings) + ", " + String(iInitializeModule.I2CAddress) + "]");
+    DebugInstantiation("I2CBase: iInitializeModule[SettingsAddress, NumberOfSettings, I2CAddress]=[" + String(iInitializeModule.SettingsAddress) + ", " + String(iInitializeModule.NumberOfSettings) + ", " + String(iInitializeModule.I2CAddress) + "]");
 
     _mText = new TextI2CBase();
 
@@ -61,6 +63,7 @@ I2CBase::I2CBase(sInitializeModule iInitializeModule) : ProjectBase(iInitializeM
 
 I2CBase::~I2CBase()
 {
+    DebugDestroy("I2CBase");
 }
 
 String I2CBase::GetStatus()

@@ -15,6 +15,7 @@
 // 26.09.2022: EXTERNAL_EEPROM defined in platform.ini - Stefan Rau
 // 26.09.2022: DEBUG_APPLICATION defined in platform.ini - Stefan Rau
 // 02.12.2022: extended by ARDUINO_NANO_RP2040_CONNECT - Stefan Rau
+// 21.12.2022: extend destructor - Stefan Rau
 
 #include "ProjectBase.h"
 
@@ -30,7 +31,7 @@ static bool gGlobalEEPROMIsInitialized = false;
 
 ProjectBase::ProjectBase(int iSettingsAddress, int iNumberOfSettings)
 {
-    DebugInstantiation("New ProjectBase: iInitializeModule[SettingsAddress, NumberOfSettings]=[" + String(iSettingsAddress) + ", " + String(iNumberOfSettings) + "]");
+    DebugInstantiation("ProjectBase: iInitializeModule[SettingsAddress, NumberOfSettings]=[" + String(iSettingsAddress) + ", " + String(iNumberOfSettings) + "]");
 
 #ifdef EXTERNAL_EEPROM
     // try only once to instantiate the EEPROM: with the 1st call of this constructor
@@ -56,11 +57,11 @@ ProjectBase::ProjectBase(int iSettingsAddress, int iNumberOfSettings)
 
         if (gI2CGlobalEEPROM != nullptr)
         {
-            DebugPrint("EEPROM is initialized");
+            DebugPrintLn("EEPROM is initialized");
         }
         else
         {
-            DebugPrint("EEPROM is not initialized");
+            DebugPrintLn("EEPROM is not initialized");
         }
 
         gGlobalEEPROMIsInitialized = true;
@@ -79,7 +80,7 @@ ProjectBase::ProjectBase(int iSettingsAddress, int iNumberOfSettings)
         else
         {
             // ErrorPrint(Error::eSeverity::TFatal, _mText->InconsistentParameters());
-            DebugPrint("Implementation error: parameter iNumberOfSettings must be set to a value > 0");
+            DebugPrintLn("Implementation error: parameter iNumberOfSettings must be set to a value > 0");
             return;
         }
     }
@@ -92,6 +93,7 @@ ProjectBase::ProjectBase()
 
 ProjectBase::~ProjectBase()
 {
+    DebugDestroy("ProjectBase");
 }
 
 #ifdef EXTERNAL_EEPROM
@@ -131,7 +133,7 @@ void ProjectBase::SetSetting(int iSettingNumber, char iValue)
         }
 #endif
     }
-    DebugPrint("Set Setting: " + String(_mSettingAdddress) + ", " + String(iValue));
+    DebugPrintLn("Set Setting: " + String(_mSettingAdddress) + ", " + String(iValue));
 #endif
 }
 
@@ -150,7 +152,7 @@ char ProjectBase::GetSetting(int iSettingNumber)
 #endif
     }
 
-    DebugPrint("Get Setting: " + String(_mSettingAdddress) + ", " + String(lSetting));
+    DebugPrintLn("Get Setting: " + String(_mSettingAdddress) + ", " + String(lSetting));
 
 #endif
 

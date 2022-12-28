@@ -6,6 +6,7 @@
 // 21.10.2021: Dispatcher has now chars as input - Stefan Rau
 // 20.06.2022: Debug instantiation of classes - Stefan Rau
 // 26.09.2022: DEBUG_APPLICATION defined in platform.ini - Stefan Rau
+// 21.12.2022: extend destructor - Stefan Rau
 
 #include "TextBase.h"
 
@@ -13,7 +14,7 @@ static char gTextBaseLanguage; // Stores the language that is used for all text 
 
 TextBase::TextBase(int iSettingsAddress) : ProjectBase(iSettingsAddress, 1)
 {
-	DebugInstantiation("New TextI2CBase: SettingsAddress=" + String(iSettingsAddress));
+	DebugInstantiation("TextI2CBase: SettingsAddress=" + String(iSettingsAddress));
 
 	if (iSettingsAddress >= 0)
 	{
@@ -30,6 +31,7 @@ TextBase::TextBase(int iSettingsAddress) : ProjectBase(iSettingsAddress, 1)
 
 TextBase::~TextBase()
 {
+	DebugDestroy("TextBase");
 }
 
 String TextBase::GetValidLanguages()

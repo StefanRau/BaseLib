@@ -11,8 +11,8 @@
 #include "Debug.h"
 
 #ifdef DEBUG_APPLICATION
-#define TIMER_INTERRUPT_DEBUG 1
-#define _TIMERINTERRUPT_LOGLEVEL_ 1
+#define TIMER_INTERRUPT_DEBUG 3
+#define _TIMERINTERRUPT_LOGLEVEL_ 3
 #define LOCAL_DEBUG 0
 #include "TimerInterrupt_Generic_Debug.h"
 #else
@@ -111,7 +111,7 @@ public:
     /// Initialize hardware timer depending on hardware
     /// </summary>
     /// <param name="iCycleTimeInMs">Set Cycle time of the timer in milliseconds</param>
-    void SetCycleTimeInMs(unsigned long iCycleTimeInMs);
+    void SetCycleTimeInMs(unsigned int iCycleTimeInMs);
 
     /// <summary>
     /// Get a list of all tasks

@@ -4,6 +4,7 @@
 // History
 // 18.10.2021: 1st version - Stefan Rau
 // 20.06.2022: Debug instantiation of classes - Stefan Rau
+// 21.12.2022: extend destructor - Stefan Rau
 
 #include "List.h"
 
@@ -14,12 +15,33 @@ ListCollection::ListCollection()
 
 ListCollection::~ListCollection()
 {
-	// todo: destroy all list objects and their contained content objects
+	// destroy all list objects and their contained content objects
+	ListElement *lIterator;
+	bool lIterationRuns = true;
+
+	DebugDestroy("ListCollection");
+
+	IterateStart();
+
+	do
+	{
+		// Delete each single element
+		lIterator = (ListElement *)Iterate();
+		if (lIterator != nullptr)
+		{
+			delete lIterator->_mObject;
+			delete lIterator;
+		}
+		else
+		{
+			lIterationRuns = false;
+		}
+	} while (lIterationRuns);
 }
 
 ListCollection *ListCollection::GetInstance()
 {
-    return new ListCollection();
+	return new ListCollection();
 }
 
 void ListCollection::Add(void *iObject)

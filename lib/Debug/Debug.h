@@ -15,10 +15,12 @@
 
 #define DebugPrint(Text) Debug::GetInstance()->Print(Text)
 #define DebugPrintLn(Text) Debug::GetInstance()->PrintLn(Text)
-// #define DebugMethodCalls(Text) Debug::GetInstance()->PrintLn(String("Method ") + String(Text))
-// #define DebugInstantiation(Text) Debug::GetInstance()->PrintLn(String("New ") + String(Text))
-#define DebugMethodCalls(Text) Debug::GetInstance()->PrintLn(Text)
-#define DebugInstantiation(Text) Debug::GetInstance()->PrintLn(Text)
+#define DebugMethodCalls(Text) Debug::GetInstance()->PrintLn(String("Method ") + String(Text))
+#define DebugInstantiation(Text) Debug::GetInstance()->PrintLn(String("New ") + String(Text))
+#define DebugDestroy(Text) Debug::GetInstance()->PrintLn(String("Destroy ") + String(Text))
+// #define DebugMethodCalls(Text) Debug::GetInstance()->PrintLn(Text)
+// #define DebugInstantiation(Text) Debug::GetInstance()->PrintLn(Text)
+// #define DebugDestroy(Text) Debug::GetInstance()->PrintLn(Text)
 #define DebugPrintFromTask(Text) Debug::GetInstance()->PrintFromTask(Text)
 #define DebugLoop() Debug::GetInstance()->loop()
 
@@ -28,6 +30,7 @@
 #define DebugPrintLn(Text)
 #define DebugMethodCalls(Text)
 #define DebugInstantiation(Text)
+#define DebugDestroy(Text)
 #define DebugPrintFromTask(Text)
 #define DebugLoop()
 
