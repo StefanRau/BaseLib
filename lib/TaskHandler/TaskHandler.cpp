@@ -26,12 +26,12 @@
 #endif
 
 #ifdef ARDUINO_SAMD_NANO_33_IOT
-#define USING_TIMER_TC3         true      // Only TC3 can be used for SAMD51
-#define USING_TIMER_TC4         false     // Not to use with Servo library
-#define USING_TIMER_TC5         false
-#define USING_TIMER_TCC         false
-#define USING_TIMER_TCC1        false
-#define USING_TIMER_TCC2        false     // Don't use this, can crash on some boards
+#define USING_TIMER_TC3 true
+#define USING_TIMER_TC4 false
+#define USING_TIMER_TC5 false
+#define USING_TIMER_TCC false
+#define USING_TIMER_TCC1 false
+#define USING_TIMER_TCC2 false
 #endif
 
 #include <TimerInterrupt_Generic.h>
@@ -50,7 +50,7 @@ static SAMDTimer lTimer(TIMER_TC3);
 
 #ifdef ARDUINO_ARDUINO_NANO33BLE
 #warning ARDUINO_ARDUINO_NANO33BLE
-#define TIMER1_TICKS_FOR_1_MS 1000
+#define TIMER1_TICKS_FOR_1_MS 10
 static NRF52_MBED_Timer lTimer(NRF_TIMER_3);
 #endif
 
@@ -71,7 +71,6 @@ void TaskDispatcher()
 			lTaskIterator->Process();
 		}
 	} while (lTaskIterator != nullptr);
-
 }
 
 /////////////////////////////////////////////////////////////
@@ -102,17 +101,22 @@ TaskHandler *TaskHandler::GetInstance()
 	return gInstance;
 }
 
-void TaskHandler::SetCycleTimeInMs(unsigned int iCycleTimeInMs)
+void TaskHandler::SetCycleTimeInMs(unsigned long iCycleTimeInMs)
 {
 	// Initialize hardware timer
+#ifdef ARDUINO_SAMD_NANO_33_IOT
 	if (lTimer.attachInterruptInterval((float)iCycleTimeInMs * TIMER1_TICKS_FOR_1_MS, TaskDispatcher))
-	{
-		DebugPrintLn("Task timer set");
-	}
-	else
-	{
-		DebugPrintLn("Setting Task timer failed");
-	};
+#endif
+#if defined(ARDUINO_ARDUINO_NANO33BLE) or defined(ARDUINO_AVR_NANO_EVERY)
+		if (lTimer.attachInterruptInterval(iCycleTimeInMs * TIMER1_TICKS_FOR_1_MS, TaskDispatcher))
+#endif
+		{
+			DebugPrintLn("Task timer set");
+		}
+		else
+		{
+			DebugPrintLn("Setting Task timer failed");
+		};
 }
 
 ListCollection *TaskHandler::GetTaskList()

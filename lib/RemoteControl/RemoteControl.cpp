@@ -8,7 +8,7 @@
 // 26.09.2022: DEBUG_APPLICATION defined in platform.ini - Stefan Rau
 // 11.10.2022: remove text object - Stefan Rau
 // 11.10.2022: baudrate of remote control can be defined by pragma - Stefan Rau
-// 19.10.2022: no usane of String lib anymore => use char and char* only - Stefan Rau
+// 19.10.2022: no usage of String lib anymore => use char and char* only - Stefan Rau
 
 #if defined(ARDUINO_AVR_NANO_EVERY) or defined(ARDUINO_AVR_ATTINYX4)
 //#include <SoftwareSerial.h>

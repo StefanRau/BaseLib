@@ -111,7 +111,7 @@ public:
     /// Initialize hardware timer depending on hardware
     /// </summary>
     /// <param name="iCycleTimeInMs">Set Cycle time of the timer in milliseconds</param>
-    void SetCycleTimeInMs(unsigned int iCycleTimeInMs);
+    void SetCycleTimeInMs(unsigned long iCycleTimeInMs);
 
     /// <summary>
     /// Get a list of all tasks
