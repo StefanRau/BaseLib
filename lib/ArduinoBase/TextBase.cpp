@@ -67,7 +67,7 @@ String TextBase::GetSelectedLanguageName()
 }
 
 #ifndef DEBUG_APPLICATION
-String TextBase::Dispatch(char iModuleIdentifyer, char iParameter)
+String TextBase::DispatchSerial(char iModuleIdentifyer, char iParameter)
 {
 
 	switch (iModuleIdentifyer)

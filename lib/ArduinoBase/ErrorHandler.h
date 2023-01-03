@@ -13,6 +13,10 @@
 #include "List.h"
 #include "I2CBase.h"
 
+#ifndef EXTERNAL_EEPROM
+#warning No storage for error log
+#endif
+
 /// <summary>
 /// Local text class of the module
 /// </summary>
@@ -97,16 +101,10 @@ public:
 #define ErrorPrint(iSeverity, iErrorMessage) ErrorHandler::GetInstance()->Print(iSeverity, iErrorMessage)
 #define ErrorDetected() ErrorHandler::GetInstance()->ContainsErrors()
 
-#ifdef ARDUINO_AVR_NANO_EVERY
-#define ErrorHandlerStartAddress 0x000 // nano uses internal EEPROM for settings
+#if defined(ARDUINO_AVR_NANO_EVERY) or defined(ARDUINO_AVR_ATTINYX4) or defined(ARDUINO_AVR_ATTINYX5) or defined(ARDUINO_AVR_ATmega8) or defined(ARDUINO_AVR_DIGISPARK)
+#define ErrorHandlerStartAddress 0x000 // uses internal EEPROM for settings
 #endif
-#ifdef ARDUINO_SAMD_NANO_33_IOT
-#define ErrorHandlerStartAddress 0x0100 // 1st address for logging
-#endif
-#ifdef ARDUINO_ARDUINO_NANO33BLE
-#define ErrorHandlerStartAddress 0x0100 // 1st address for logging
-#endif
-#ifdef ARDUINO_NANO_RP2040_CONNECT
+#if defined(ARDUINO_SAMD_NANO_33_IOT) or defined(ARDUINO_ARDUINO_NANO33BLE) or defined(ARDUINO_NANO_RP2040_CONNECT)
 #define ErrorHandlerStartAddress 0x0100 // 1st address for logging
 #endif
 
@@ -165,7 +163,7 @@ public:
 	/// <param name="iModuleIdentifyer">If this matches with the identifyer of this module, then iParameter is analyzed</param>
 	/// <param name="iParameter">Parameter or command that is to be analyzed</param>
 	/// <returns>Reaction of dispatching</returns>
-	String Dispatch(char iModuleIdentifyer, char iParameter) override;
+	String DispatchSerial(char iModuleIdentifyer, char iParameter) override;
 #endif
 
 private:

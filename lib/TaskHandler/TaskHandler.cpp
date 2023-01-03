@@ -36,22 +36,18 @@
 
 #include <TimerInterrupt_Generic.h>
 
-#ifdef ARDUINO_AVR_NANO_EVERY
-#warning ARDUINO_AVR_NANO_EVERY
+#if defined(ARDUINO_AVR_NANO_EVERY)
 #define TIMER1_TICKS_FOR_1_MS 1
 #define lTimer ITimer1
-#endif
-
-#ifdef ARDUINO_SAMD_NANO_33_IOT
-#warning ARDUINO_SAMD_NANO_33_IOT
+#elif defined(ARDUINO_SAMD_NANO_33_IOT)
 #define TIMER1_TICKS_FOR_1_MS 1000
 static SAMDTimer lTimer(TIMER_TC3);
-#endif
-
-#ifdef ARDUINO_ARDUINO_NANO33BLE
-#warning ARDUINO_ARDUINO_NANO33BLE
+#elif defined(ARDUINO_ARDUINO_NANO33BLE)
 #define TIMER1_TICKS_FOR_1_MS 10
 static NRF52_MBED_Timer lTimer(NRF_TIMER_3);
+#define TASK_HANDLER_TIMER_DEFINED
+#else
+#error Task Handler not defined for given processor
 #endif
 
 static TaskHandler *gInstance = nullptr;

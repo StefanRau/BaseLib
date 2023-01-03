@@ -9,11 +9,18 @@
 
 #include <Arduino.h>
 
+#if defined(ARDUINO_AVR_NANO_EVERY) or defined(ARDUINO_AVR_ATTINYX4) or defined(ARDUINO_AVR_ATTINYX5) or defined(ARDUINO_AVR_ATmega8) or defined(ARDUINO_AVR_DIGISPARK)
+#define INTERNAL_EEPROM
+#include <EEPROM.h>
+#endif
+
 #ifdef EXTERNAL_EEPROM
 #include <I2C_eeprom.h>
-#else
+#endif
+
+#if not defined(INTERNAL_EEPROM) and not defined(EXTERNAL_EEPROM)
 #define NO_EEPROM
-#warning "No storage for settings"
+#warning No storage for settings
 #endif
 
 #include "Debug.h"
@@ -33,9 +40,11 @@ public:
 
 	const unsigned char cNullSetting = 255; // There is either no setting in EEPROM or no EEPROM defined
 
+#ifndef NO_EEPROM
 private:
 	int _mSettingAdddress = -1; // EEPROM Address of the settings of this module. Per default, the setting is inactive.
 	int _mNumberOfSettings = 0; // Number of reserved settings in the EEPROM.
+#endif
 
 protected:
 	/// <summary>
@@ -49,7 +58,6 @@ protected:
 	/// Constructor without setting
 	/// </summary>
 	ProjectBase();
-
 	~ProjectBase();
 
 public:
@@ -74,7 +82,7 @@ public:
 	/// <param name="iModuleIdentifyer">If this matches with the identifyer of this module, then iParameter is analyzed</param>
 	/// <param name="iParameter">Parameter or command that is to be analyzed</param>
 	/// <returns>Reaction of dispatching</returns>
-	virtual String Dispatch(char iModuleIdentifyer, char iParameter) = 0;
+	virtual String DispatchSerial(char iModuleIdentifyer, char iParameter) = 0;
 #endif
 
 	/// <summary>

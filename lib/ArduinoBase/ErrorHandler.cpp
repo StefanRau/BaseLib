@@ -221,7 +221,7 @@ void ErrorHandler::loop()
 }
 
 #ifndef DEBUG_APPLICATION
-String ErrorHandler::Dispatch(char iModuleIdentifyer, char iParameter)
+String ErrorHandler::DispatchSerial(char iModuleIdentifyer, char iParameter)
 {
 #ifdef EXTERNAL_EEPROM
 	union uErrorEEPROMHeader lErrorEepromHeader;

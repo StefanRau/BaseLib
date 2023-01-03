@@ -87,7 +87,7 @@ public:
 	/// '?' : Returns the current language e.g. "D"
 	/// </param>
 	/// <returns>Reaction of dispatching</returns>
-	String Dispatch(char iModuleIdentifyer, char iParameter) override;
+	String DispatchSerial(char iModuleIdentifyer, char iParameter) override;
 #endif
 
 	/// <summary>

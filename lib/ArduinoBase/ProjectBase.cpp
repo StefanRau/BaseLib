@@ -33,6 +33,7 @@ ProjectBase::ProjectBase(int iSettingsAddress, int iNumberOfSettings)
 {
     DebugInstantiation("ProjectBase: iInitializeModule[SettingsAddress, NumberOfSettings]=[" + String(iSettingsAddress) + ", " + String(iNumberOfSettings) + "]");
 
+#ifndef NO_EEPROM
 #ifdef EXTERNAL_EEPROM
     // try only once to instantiate the EEPROM: with the 1st call of this constructor
     if (!gGlobalEEPROMIsInitialized)
@@ -84,6 +85,8 @@ ProjectBase::ProjectBase(int iSettingsAddress, int iNumberOfSettings)
             return;
         }
     }
+
+#endif
 }
 
 ProjectBase::ProjectBase()
@@ -126,11 +129,15 @@ void ProjectBase::SetSetting(int iSettingNumber, char iValue)
     // Settings address and value must be valid
     if ((_mSettingAdddress >= 0) && (iSettingNumber > 0) && (iSettingNumber <= _mNumberOfSettings) && (iValue != cNullSetting))
     {
+#ifdef INTERNAL_EEPROM
+        EEPROM.write(iSettingNumber, iValue);
+#else
 #ifdef EXTERNAL_EEPROM
         if (gI2CGlobalEEPROM != nullptr)
         {
             gI2CGlobalEEPROM->updateByte(_mSettingAdddress + iSettingNumber - 1, iValue);
         }
+#endif
 #endif
     }
     DebugPrintLn("Set Setting: " + String(_mSettingAdddress) + ", " + String(iValue));
@@ -144,16 +151,18 @@ char ProjectBase::GetSetting(int iSettingNumber)
 #ifndef NO_EEPROM
     if ((_mSettingAdddress >= 0) && (iSettingNumber > 0) && (iSettingNumber <= _mNumberOfSettings))
     {
+#ifdef INTERNAL_EEPROM
+        lSetting = EEPROM.read(iSettingNumber);
+#else
 #ifdef EXTERNAL_EEPROM
         if (gI2CGlobalEEPROM != nullptr)
         {
             lSetting = gI2CGlobalEEPROM->readByte(_mSettingAdddress + iSettingNumber - 1);
         }
 #endif
+#endif
     }
-
     DebugPrintLn("Get Setting: " + String(_mSettingAdddress) + ", " + String(lSetting));
-
 #endif
 
     return lSetting;
