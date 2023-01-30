@@ -8,16 +8,18 @@
 // 23.09.2022: Get rid of TimerInterrupt_Generic_Debug - Stefan Rau
 // 26.09.2022: DEBUG_APPLICATION defined in platform.ini - Stefan Rau
 // 04.11.2022: Wait until serial port is ready; that starts debuggernot before the connected terminal is ready - Stefan Rau
+// 08.01.2023: Reorganized debugging by implementing diffreent levels - Stefan Rau
 
 #include "Debug.h"
 
-#ifdef DEBUG_APPLICATION
+#if DEBUG_APPLICATION > 0
 
 static Debug *gInstance = nullptr;
 
 Debug::Debug()
 {
-	Serial.begin(DEBUG_APPLICATION);
+	// noInterrupts();
+	Serial.begin(DEBUG_SPEED);
 
 	while (!Serial)
 	{
@@ -29,6 +31,7 @@ Debug::Debug()
 	Serial.println("Start Debugger");
 	// Wait until buffer is empty
 	Serial.flush();
+	// interrupts();
 }
 
 Debug::~Debug()
@@ -44,30 +47,38 @@ Debug *Debug::GetInstance()
 
 void Debug::Print(String iOutput)
 {
+	// noInterrupts();
 	Serial.print(iOutput);
 	// Wait until buffer is empty
 	Serial.flush();
+	// interrupts();
 }
 
 void Debug::Print(const Printable &iOutput)
 {
+	// noInterrupts();
 	Serial.print(iOutput);
 	// Wait until buffer is empty
 	Serial.flush();
+	// interrupts();
 }
 
 void Debug::PrintLn(String iOutput)
 {
+	// noInterrupts();
 	Serial.println(iOutput);
 	// Wait until buffer is empty
 	Serial.flush();
+	// interrupts();
 }
 
 void Debug::PrintLn(const Printable &iOutput)
 {
+	// noInterrupts();
 	Serial.println(iOutput);
 	// Wait until buffer is empty
 	Serial.flush();
+	// interrupts();
 }
 
 void Debug::PrintFromTask(String iOutput)
@@ -81,12 +92,14 @@ void Debug::loop()
 {
 	if (_mBufferContainsData)
 	{
+		// noInterrupts();
 		Serial.print(_mWriteBuffer);
 		// Serial.println();
 		//  Wait until buffer is empty
 		Serial.flush();
 		_mWriteBuffer = "";
 		_mBufferContainsData = false;
+		// interrupts();
 	}
 }
 

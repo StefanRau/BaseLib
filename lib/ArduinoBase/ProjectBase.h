@@ -28,7 +28,7 @@
 class ProjectBase
 {
 public:
-#ifndef DEBUG_APPLICATION
+#if DEBUG_APPLICATION == 0
 	// Global commands for remote control
 	enum eFunctionCode : char
 	{
@@ -75,7 +75,7 @@ public:
 	static I2C_eeprom *GetI2CGlobalEEPROM();
 #endif
 
-#ifndef DEBUG_APPLICATION
+#if DEBUG_APPLICATION == 0
 	/// <summary>
 	/// Dispatches commands got from en external input, e.g. a serial interface
 	/// </summary>

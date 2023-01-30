@@ -10,7 +10,7 @@
 #include "List.h"
 #include "Debug.h"
 
-#ifdef DEBUG_APPLICATION
+#if DEBUG_APPLICATION > 0
 #define TIMER_INTERRUPT_DEBUG 3
 #define _TIMERINTERRUPT_LOGLEVEL_ 3
 #define LOCAL_DEBUG 0

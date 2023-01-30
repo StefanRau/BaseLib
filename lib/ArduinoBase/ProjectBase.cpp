@@ -19,7 +19,7 @@
 
 #include "ProjectBase.h"
 
-#ifndef DEBUG_APPLICATION
+#if DEBUG_APPLICATION == 0
 static bool _gVerboseMode = false; // returns results of dispatcher - true: in details, false: as single letter code
 #endif
 
@@ -111,7 +111,7 @@ I2C_eeprom *ProjectBase::GetI2CGlobalEEPROM()
 }
 #endif
 
-#ifndef DEBUG_APPLICATION
+#if DEBUG_APPLICATION == 0
 void ProjectBase::SetVerboseMode(bool iVerboseMode)
 {
     _gVerboseMode = iVerboseMode;

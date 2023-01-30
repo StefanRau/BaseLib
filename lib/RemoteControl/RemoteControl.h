@@ -7,7 +7,7 @@
 #ifndef _RemoteControl_h
 #define _RemoteControl_h
 
-#ifndef DEBUG_APPLICATION
+#if DEBUG_APPLICATION == 0
 #ifndef SPEED_REMOTE_CONTROL
 #define SPEED_REMOTE_CONTROL 9600
 #endif

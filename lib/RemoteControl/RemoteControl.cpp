@@ -16,7 +16,7 @@
 
 #include "RemoteControl.h"
 
-#ifndef DEBUG_APPLICATION
+#if DEBUG_APPLICATION == 0
 
 static RemoteControl *gInstance = nullptr;
 

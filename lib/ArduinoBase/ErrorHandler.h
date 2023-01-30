@@ -129,7 +129,7 @@ private:
 	int _mEEPROMErrorIterator = 0;														// number of next error log item
 	bool _mErrorDetected = false;														// signals that an error was detected
 
-#ifndef DEBUG_APPLICATION
+#if DEBUG_APPLICATION == 0
 	// Commands for remote control
 	enum eFunctionCode : char
 	{
@@ -156,7 +156,7 @@ public:
 	/// </summary>
 	void loop() override;
 
-#ifndef DEBUG_APPLICATION
+#if DEBUG_APPLICATION == 0
 	/// <summary>
 	/// Dispatches commands got from en external input, e.g. a serial interface - only a dummy implementation here
 	/// </summary>

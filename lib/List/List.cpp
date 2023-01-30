@@ -4,7 +4,8 @@
 // History
 // 18.10.2021: 1st version - Stefan Rau
 // 20.06.2022: Debug instantiation of classes - Stefan Rau
-// 21.12.2022: extend destructor - Stefan Rau
+// 21.12.2022: Extend destructor - Stefan Rau
+// 26.01.2023: Add debug support - Stefan Rau
 
 #include "List.h"
 
@@ -16,10 +17,10 @@ ListCollection::ListCollection()
 ListCollection::~ListCollection()
 {
 	// destroy all list objects and their contained content objects
+	DebugDestroy("ListCollection");
+
 	ListElement *lIterator;
 	bool lIterationRuns = true;
-
-	DebugDestroy("ListCollection");
 
 	IterateStart();
 
@@ -41,12 +42,13 @@ ListCollection::~ListCollection()
 
 ListCollection *ListCollection::GetInstance()
 {
+	DebugMethodCalls("ListCollection::GetInstance");
 	return new ListCollection();
 }
 
 void ListCollection::Add(void *iObject)
 {
-	DebugPrintLn("ListCollection new Entry");
+	DebugMethodCalls("ListCollection::Add");
 
 	ListElement *lNewElement;
 
@@ -69,16 +71,20 @@ void ListCollection::Add(void *iObject)
 
 void *ListCollection::GetFirst()
 {
+	DebugMethodCalls("ListCollection::GetFirst");
 	return _mFirst->_mObject;
 }
 
 void *ListCollection::GetLast()
 {
+	DebugMethodCalls("ListCollection::GetLast");
 	return _mLast->_mObject;
 }
 
 void *ListCollection::Get(int iIndex)
 {
+	DebugMethodCalls("ListCollection::Get");
+
 	int lIterator = 0;
 
 	for (ListElement *lCurrentElement = _mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->_mNext, lIterator++)
@@ -96,6 +102,8 @@ void *ListCollection::Get(int iIndex)
 
 int ListCollection::Count()
 {
+	DebugMethodCalls("ListCollection::Count");
+
 	int lIterator = 0;
 
 	for (ListElement *lCurrentElement = _mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->_mNext, lIterator++)
@@ -106,11 +114,15 @@ int ListCollection::Count()
 
 void ListCollection::IterateStart()
 {
+	DebugMethodCalls("ListCollection::IterateStart");
+
 	_mIterator = _mFirst;
 }
 
 void *ListCollection::Iterate()
 {
+	DebugMethodCalls("ListCollection::Iterate");
+
 	void *lCurrentObject;
 
 	if (_mIterator != nullptr)

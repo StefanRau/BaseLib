@@ -11,20 +11,6 @@
 
 class Application
 {
-private:
-    // Libraries
-
-
-    // Settings
-
-
-private:
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    Application();
-    ~Application();
-
 public:
     /// <summary>
     /// Gets a singleton.
@@ -41,6 +27,18 @@ public:
     /// Called by framework periodically
     /// </summary>
     void loop();
+
+protected:
+    // Libraries
+
+    // Settings
+
+private:
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    Application();
+    ~Application();
 };
 
 #endif

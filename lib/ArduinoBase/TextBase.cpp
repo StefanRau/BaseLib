@@ -66,7 +66,7 @@ String TextBase::GetSelectedLanguageName()
 	return LanguageGerman();
 }
 
-#ifndef DEBUG_APPLICATION
+#if DEBUG_APPLICATION == 0
 String TextBase::DispatchSerial(char iModuleIdentifyer, char iParameter)
 {
 

@@ -220,7 +220,7 @@ void ErrorHandler::loop()
 	// nothing implemented => read errors via remote control
 }
 
-#ifndef DEBUG_APPLICATION
+#if DEBUG_APPLICATION == 0
 String ErrorHandler::DispatchSerial(char iModuleIdentifyer, char iParameter)
 {
 #ifdef EXTERNAL_EEPROM
