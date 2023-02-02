@@ -8,7 +8,7 @@
 // 23.09.2022: Get rid of TimerInterrupt_Generic_Debug - Stefan Rau
 // 26.09.2022: DEBUG_APPLICATION defined in platform.ini - Stefan Rau
 // 04.11.2022: Wait until serial port is ready; that starts debuggernot before the connected terminal is ready - Stefan Rau
-// 08.01.2023: Reorganized debugging by implementing diffreent levels - Stefan Rau
+// 08.01.2023: Reorganized debugging by implementing different levels - Stefan Rau
 
 #include "Debug.h"
 
