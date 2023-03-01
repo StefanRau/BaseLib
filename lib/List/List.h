@@ -47,6 +47,12 @@ public:
 	void Add(void *iObject);
 
 	/// <summary>
+	/// Deletes an object from the list
+	/// </summary>
+	/// <param name="iIndex">Index of the object to delete</param>
+	void Delete(int iIndex);
+
+	/// <summary>
 	/// Gets the 1st object of the list
 	/// </summary>
 	/// <returns>Object to get</returns>
@@ -86,6 +92,13 @@ private:
 	ListElement *_mFirst = nullptr;	   // pointer to 1st element of the list
 	ListElement *_mLast = nullptr;	   // pointer to last element of the list
 	ListElement *_mIterator = nullptr; // iterator for iterating through a list
+
+		/// <summary>
+	/// Gets the ListElement at the index
+	/// </summary>
+	/// <param name="iIndex">Index of the object to get</param>
+	/// <returns>ListElement to get</returns>
+	ListElement *GetInternal(int iIndex);
 };
 
 #endif

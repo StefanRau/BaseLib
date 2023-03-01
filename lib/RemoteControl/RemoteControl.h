@@ -53,8 +53,23 @@ public:
 	/// <summary>
 	/// Outputs a string to serial interface
 	/// </summary>
-	/// <param name="iOutput">String to output</param>
+	/// <param name="iOutput">Value for output</param>
 	void Write(char *iOutput);
+	void Write(const char *iOutput);
+	void Write(int iOutput);
+
+	/// <summary>
+	/// Outputs a string to serial interface with line break
+	/// </summary>
+	/// <param name="iOutput">Value for output</param>
+	void WriteLn(char *iOutput);
+	void WriteLn(const char *iOutput);
+	void WriteLn(int iOutput);
+
+	/// <summary>
+	/// Outputs a ">" to serial interface
+	/// </summary>
+	void WaitForInput();
 };
 
 #endif

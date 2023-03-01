@@ -11,7 +11,7 @@
 // 19.10.2022: no usage of String lib anymore => use char and char* only - Stefan Rau
 
 #if defined(ARDUINO_AVR_NANO_EVERY) or defined(ARDUINO_AVR_ATTINYX4)
-//#include <SoftwareSerial.h>
+// #include <SoftwareSerial.h>
 #endif
 
 #include "RemoteControl.h"
@@ -91,7 +91,42 @@ void RemoteControl::Read()
 void RemoteControl::Write(char *iOutput)
 {
     Serial.print(iOutput);
-    Serial.println('#');
+    Serial.flush();
+}
+
+void RemoteControl::Write(const char *iOutput)
+{
+    Serial.print(iOutput);
+    Serial.flush();
+}
+
+void RemoteControl::Write(int iOutput)
+{
+    Serial.print(iOutput);
+    Serial.flush();
+}
+
+void RemoteControl::WriteLn(char *iOutput)
+{
+    Serial.println(iOutput);
+    Serial.flush();
+}
+
+void RemoteControl::WriteLn(const char *iOutput)
+{
+    Serial.println(iOutput);
+    Serial.flush();
+}
+
+void RemoteControl::WriteLn(int iOutput)
+{
+    Serial.println(iOutput);
+    Serial.flush();
+}
+
+void RemoteControl::WaitForInput()
+{
+    Serial.print(">");
     Serial.flush();
 }
 

@@ -69,6 +69,66 @@ void ListCollection::Add(void *iObject)
 	}
 }
 
+void ListCollection::Delete(int iIndex)
+{
+	DebugMethodCalls("ListCollection::Delete");
+
+	ListElement *lIterator;
+
+	lIterator = GetInternal(iIndex);
+
+	if (lIterator == nullptr)
+	{
+		// If the element does not exist
+		return;
+	}
+
+	// Adapt the element before
+	if (lIterator->_mPrevious != nullptr)
+	{
+		// If a predecessor exists
+
+		if (lIterator->_mNext == nullptr)
+		{
+			// the current element is the last one => make entry before the last one
+			lIterator->_mPrevious->_mNext = nullptr;
+		}
+		else
+		{
+			// If a successor exists => entry before points to the successor of the current entry
+			lIterator->_mPrevious->_mNext = lIterator->_mNext;
+		}
+	}
+
+	// Adapt the element after
+	if (lIterator->_mNext != nullptr)
+	{
+		// If successor exists
+
+		if (lIterator->_mPrevious == nullptr)
+		{
+			// the current element is the 1st one => make entry after the 1st one
+			lIterator->_mNext->_mPrevious = nullptr;
+		}
+		else
+		{
+			// If a predecessor exists => entry after points to the predecessor of the current entry
+			lIterator->_mNext->_mPrevious = lIterator->_mPrevious;
+		}
+	}
+
+	// Rempove current element from memory
+	if (lIterator->_mObject != nullptr)
+	{
+		delete lIterator->_mObject;
+	}
+
+	if (lIterator != nullptr)
+	{
+		delete lIterator;
+	}
+}
+
 void *ListCollection::GetFirst()
 {
 	DebugMethodCalls("ListCollection::GetFirst");
@@ -85,6 +145,14 @@ void *ListCollection::Get(int iIndex)
 {
 	DebugMethodCalls("ListCollection::Get");
 
+	ListElement *lIterator = GetInternal(iIndex);
+	return (lIterator == nullptr) ? nullptr : lIterator->_mObject;
+}
+
+ListElement *ListCollection::GetInternal(int iIndex)
+{
+	DebugMethodCalls("ListCollection::GetInternal");
+
 	int lIterator = 0;
 
 	for (ListElement *lCurrentElement = _mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->_mNext, lIterator++)
@@ -92,7 +160,7 @@ void *ListCollection::Get(int iIndex)
 		if (iIndex == lIterator)
 		{
 			// return element under this index
-			return lCurrentElement->_mObject;
+			return lCurrentElement;
 		}
 	}
 
