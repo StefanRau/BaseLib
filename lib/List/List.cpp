@@ -6,6 +6,7 @@
 // 20.06.2022: Debug instantiation of classes - Stefan Rau
 // 21.12.2022: Extend destructor - Stefan Rau
 // 26.01.2023: Add debug support - Stefan Rau
+// 27.03.2023: Add filter support - Stefan Rau
 
 #include "List.h"
 
@@ -158,6 +159,34 @@ ListElement *ListCollection::GetInternal(int iIndex)
 	for (ListElement *lCurrentElement = _mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->_mNext, lIterator++)
 	{
 		if (iIndex == lIterator)
+		{
+			// return element under this index
+			return lCurrentElement;
+		}
+	}
+
+	// Element not found, index is out of range
+	return nullptr;
+}
+
+void *ListCollection::Filter(bool (*iCallback)(void* ))
+{
+	DebugMethodCalls("ListCollection::Filter");
+
+	ListElement *lIterator = GetInternal(iCallback);
+	return (lIterator == nullptr) ? nullptr : lIterator->_mObject;
+}
+
+ListElement *ListCollection::GetInternal(bool (*iCallback)(void* ))
+{
+	DebugMethodCalls("ListCollection::GetInternal");
+
+	int lIterator = 0;
+
+	for (ListElement *lCurrentElement = _mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->_mNext, lIterator++)
+	{
+		// Call customer comparer
+		if (iCallback(lCurrentElement->_mObject))
 		{
 			// return element under this index
 			return lCurrentElement;

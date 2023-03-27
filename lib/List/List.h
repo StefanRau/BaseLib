@@ -72,6 +72,20 @@ public:
 	void *Get(int iIndex);
 
 	/// <summary>
+	/// Gets the object using a customer filter implementation
+	/// </summary>
+	/// <param name="iCallback">Method that calculates filter criteria</param>
+	/// <returns>Object to get</returns>
+	/// <remarks>
+	/// Users need to implement a static function that receives an object of the list.
+	/// The user's implementation checks the input of that function
+	/// and returns true, if the input matches a user defined criteria.
+	/// In the other case, the user function returns false.
+	/// The 1st matching object is then returned by "Filter".
+	/// </remarks>
+	void *Filter(bool (*iCallback)(void *));
+
+	/// <summary>
 	/// Calculates the size of the object list
 	/// </summary>
 	/// <returns>Size of list</returns>
@@ -93,12 +107,14 @@ private:
 	ListElement *_mLast = nullptr;	   // pointer to last element of the list
 	ListElement *_mIterator = nullptr; // iterator for iterating through a list
 
-		/// <summary>
+	/// <summary>
 	/// Gets the ListElement at the index
 	/// </summary>
 	/// <param name="iIndex">Index of the object to get</param>
+	/// <param name="iCallback">Method that calculates filter criteria</param>
 	/// <returns>ListElement to get</returns>
 	ListElement *GetInternal(int iIndex);
+	ListElement *GetInternal(bool (*iCallback)(void *));
 };
 
 #endif
