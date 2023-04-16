@@ -16,8 +16,10 @@
 
 static Debug *gInstance = nullptr;
 
-Debug::Debug()
+Debug::Debug(int iCountdown)
 {
+	int lCount = iCountdown + 1;
+
 	// noInterrupts();
 	Serial.begin(DEBUG_SPEED);
 
@@ -28,7 +30,23 @@ Debug::Debug()
 
 	delay(10);
 	// That does not work using text objects, because we would get a circular reference there
-	Serial.println("Start Debugger");
+	Serial.print("Start Debugger");
+
+	if (lCount > 1)
+	{
+		Serial.print(" in   ");
+
+		while (lCount-- > 0)
+		{
+			Serial.print("\b\b");
+			Serial.print(lCount);
+			Serial.print("s");
+			delay(1000);
+		}
+
+		Serial.println("");
+	}
+
 	// Wait until buffer is empty
 	Serial.flush();
 	// interrupts();
@@ -38,10 +56,10 @@ Debug::~Debug()
 {
 }
 
-Debug *Debug::GetInstance()
+Debug *Debug::GetInstance(int iCountdown)
 {
 	// returns a pointer to singleton instance
-	gInstance = (gInstance == nullptr) ? new Debug : gInstance;
+	gInstance = (gInstance == nullptr) ? new Debug(iCountdown) : gInstance;
 	return gInstance;
 }
 
