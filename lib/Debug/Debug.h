@@ -11,6 +11,7 @@
 #define DEBUG_SPEED 9600
 #endif
 
+#define DebugStart(Text)
 #define DebugPrint(Text)
 #define DebugPrintLn(Text)
 #define DebugMethodCalls(Text)
@@ -20,6 +21,7 @@
 #define DebugLoop()
 
 #if DEBUG_APPLICATION > 0
+#define DebugStart(Text) Debug::GetInstance(Text)
 #define DebugPrint(Text) Debug::GetInstance()->Print(Text)
 #define DebugPrintLn(Text) Debug::GetInstance()->PrintLn(Text)
 #define DebugLoop() Debug::GetInstance()->loop()
@@ -46,7 +48,7 @@
 class Debug
 {
 private:
-    Debug();
+    Debug(int iCountdown);
     ~Debug();
 
     String _mWriteBuffer = "";
@@ -57,7 +59,7 @@ public:
     /// Gets a singleton
     /// </summary>
     /// <returns>Instance of debugger</returns>
-    static Debug *GetInstance();
+    static Debug *GetInstance(int iCountdown=0);
 
     /// <summary>
     /// Writes debugging text to output
