@@ -43,9 +43,8 @@ Debug::Debug(int iCountdown)
 			Serial.print("s");
 			delay(1000);
 		}
-
-		Serial.println("");
 	}
+	Serial.println("");
 
 	// Wait until buffer is empty
 	Serial.flush();
