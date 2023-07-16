@@ -49,7 +49,7 @@ bool ListCollection::Add(void *iObject)
 	ListElement *lNewElement;
 
 	lNewElement = new ListElement();
-	if (lNewElement == NULL)
+	if (lNewElement == nullptr)
 	{
 		return false;
 	}

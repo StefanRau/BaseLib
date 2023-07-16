@@ -11,6 +11,7 @@
 // 26.09.2022: DEBUG_APPLICATION defined in platform.ini - Stefan Rau
 // 21.12.2022: extend destructor - Stefan Rau
 // 28.12.2022: fix bug with timer interrupt for NANO 33 IOT - Stefan Rau
+// 16.07.2023: Use new capabilities of list processing - Stefan Rau
 
 #include "TaskHandler.h"
 #include <Arduino.h>
@@ -54,19 +55,25 @@ static TaskHandler *gInstance = nullptr;
 
 void TaskDispatcher()
 {
-	Task *lTaskIterator;
+	Task *lTask;
 
-	TaskHandler::GetInstance()->GetTaskList()->IterateStart();
-
-	do
+	for (ListElement *lTaskIterator = TaskHandler::GetInstance()->GetTaskList()->IterateStart(); lTaskIterator != nullptr;)
 	{
 		// Ping each single task
-		lTaskIterator = (Task *)TaskHandler::GetInstance()->GetTaskList()->Iterate();
-		if (lTaskIterator != nullptr)
-		{
-			lTaskIterator->Process();
-		}
-	} while (lTaskIterator != nullptr);
+		Task *lTask = (Task *)TaskHandler::GetInstance()->GetTaskList()->Iterate(&lTaskIterator);
+		lTask->Process();
+	}
+
+	// ListElement *lTaskIterator = TaskHandler::GetInstance()->GetTaskList()->IterateStart();
+	// do
+	// {
+	// 	// Ping each single task
+	// 	lTask = (Task *)TaskHandler::GetInstance()->GetTaskList()->Iterate(lTaskIterator);
+	// 	if (lTask != nullptr)
+	// 	{
+	// 		lTask->Process();
+	// 	}
+	// } while (lTask != nullptr);
 }
 
 /////////////////////////////////////////////////////////////
