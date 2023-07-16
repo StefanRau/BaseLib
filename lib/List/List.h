@@ -44,13 +44,15 @@ public:
 	/// Adds an object to the list
 	/// </summary>
 	/// <param name="iObject">Object to add</param>
-	void Add(void *iObject);
+	/// <returns>True if element is sucessfully added</returns>
+	bool Add(void *iObject);
 
 	/// <summary>
 	/// Deletes an object from the list
 	/// </summary>
 	/// <param name="iIndex">Index of the object to delete</param>
-	void Delete(int iIndex);
+	/// <returns>True if element is sucessfully deleted</returns>
+	bool Delete(int iIndex);
 
 	/// <summary>
 	/// Gets the 1st object of the list
@@ -93,19 +95,19 @@ public:
 
 	/// <summary>
 	/// Starts a new iteration
-	/// </summary>
-	void IterateStart();
+	/// </summary>The 1st element of the list of list</returns>
+	ListElement *IterateStart();
 
 	/// <summary>
 	/// Iterates the list and gets internally the next element
 	/// </summary>
-	/// <returns>Object at the current iteration step</returns>
-	void *Iterate();
+	/// <returns>Object at the current iteration step, is overwritten with the next element</returns>
+	void *Iterate(ListElement **iCurrentElement);
 
 private:
-	ListElement *_mFirst = nullptr;	   // pointer to 1st element of the list
-	ListElement *_mLast = nullptr;	   // pointer to last element of the list
-	ListElement *_mIterator = nullptr; // iterator for iterating through a list
+	ListElement *_mFirst = nullptr; // pointer to 1st element of the list
+	ListElement *_mLast = nullptr;	// pointer to last element of the list
+	// ListElement *_mIterator = nullptr; // iterator for iterating through a list
 
 	/// <summary>
 	/// Gets the ListElement at the index

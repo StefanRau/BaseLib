@@ -7,6 +7,9 @@
 // 21.12.2022: Extend destructor - Stefan Rau
 // 26.01.2023: Add debug support - Stefan Rau
 // 27.03.2023: Add filter support - Stefan Rau
+// 02.06.2023: Add additional debug support and fix bug in destruction - Stefan Rau
+// 10.06.2023: Add and delete return false when failing - Stefan Rau
+// 09.07.2022: Parralel iterations ar enow possible as well
 
 #include "List.h"
 
@@ -20,25 +23,17 @@ ListCollection::~ListCollection()
 	// destroy all list objects and their contained content objects
 	DebugDestroy("ListCollection");
 
-	ListElement *lIterator;
-	bool lIterationRuns = true;
+	ListElement *lNextObject;
+	ListElement *lCurrentObject = _mFirst;
 
-	IterateStart();
-
-	do
+	// Delete each single element and the stored instances
+	while (lCurrentObject != nullptr)
 	{
-		// Delete each single element
-		lIterator = (ListElement *)Iterate();
-		if (lIterator != nullptr)
-		{
-			delete lIterator->_mObject;
-			delete lIterator;
-		}
-		else
-		{
-			lIterationRuns = false;
-		}
-	} while (lIterationRuns);
+		lNextObject = lCurrentObject->_mNext;
+		delete lCurrentObject->_mObject;
+		delete lCurrentObject;
+		lCurrentObject = lNextObject;
+	}
 }
 
 ListCollection *ListCollection::GetInstance()
@@ -47,13 +42,18 @@ ListCollection *ListCollection::GetInstance()
 	return new ListCollection();
 }
 
-void ListCollection::Add(void *iObject)
+bool ListCollection::Add(void *iObject)
 {
 	DebugMethodCalls("ListCollection::Add");
 
 	ListElement *lNewElement;
 
 	lNewElement = new ListElement();
+	if (lNewElement == NULL)
+	{
+		return false;
+	}
+
 	lNewElement->_mObject = iObject;
 
 	if (_mFirst == nullptr)
@@ -68,9 +68,12 @@ void ListCollection::Add(void *iObject)
 		lNewElement->_mPrevious = _mLast;
 		_mLast = lNewElement;
 	}
+
+	DebugPrintLn("Entry inserted into ListCollection");
+	return true;
 }
 
-void ListCollection::Delete(int iIndex)
+bool ListCollection::Delete(int iIndex)
 {
 	DebugMethodCalls("ListCollection::Delete");
 
@@ -81,7 +84,14 @@ void ListCollection::Delete(int iIndex)
 	if (lIterator == nullptr)
 	{
 		// If the element does not exist
-		return;
+		return false;
+	}
+
+	// Process one and only element
+	if ((lIterator->_mPrevious == nullptr) && (lIterator->_mNext == nullptr))
+	{
+		_mFirst = nullptr;
+		_mLast = nullptr;
 	}
 
 	// Adapt the element before
@@ -93,6 +103,8 @@ void ListCollection::Delete(int iIndex)
 		{
 			// the current element is the last one => make entry before the last one
 			lIterator->_mPrevious->_mNext = nullptr;
+			// Take the previous element as last one
+			_mLast = lIterator->_mPrevious;
 		}
 		else
 		{
@@ -104,12 +116,14 @@ void ListCollection::Delete(int iIndex)
 	// Adapt the element after
 	if (lIterator->_mNext != nullptr)
 	{
-		// If successor exists
+		// If a successor exists
 
 		if (lIterator->_mPrevious == nullptr)
 		{
 			// the current element is the 1st one => make entry after the 1st one
 			lIterator->_mNext->_mPrevious = nullptr;
+			// Take the next element as 1st one
+			_mFirst = lIterator->_mNext;
 		}
 		else
 		{
@@ -124,10 +138,9 @@ void ListCollection::Delete(int iIndex)
 		delete lIterator->_mObject;
 	}
 
-	if (lIterator != nullptr)
-	{
-		delete lIterator;
-	}
+	delete lIterator;
+	DebugPrintLn("Entry " + String(iIndex) + " deleted from ListCollection");
+	return true;
 }
 
 void *ListCollection::GetFirst()
@@ -169,7 +182,7 @@ ListElement *ListCollection::GetInternal(int iIndex)
 	return nullptr;
 }
 
-void *ListCollection::Filter(bool (*iCallback)(void* ))
+void *ListCollection::Filter(bool (*iCallback)(void *))
 {
 	DebugMethodCalls("ListCollection::Filter");
 
@@ -177,7 +190,7 @@ void *ListCollection::Filter(bool (*iCallback)(void* ))
 	return (lIterator == nullptr) ? nullptr : lIterator->_mObject;
 }
 
-ListElement *ListCollection::GetInternal(bool (*iCallback)(void* ))
+ListElement *ListCollection::GetInternal(bool (*iCallback)(void *))
 {
 	DebugMethodCalls("ListCollection::GetInternal");
 
@@ -209,23 +222,23 @@ int ListCollection::Count()
 	return lIterator;
 }
 
-void ListCollection::IterateStart()
+ListElement *ListCollection::IterateStart()
 {
 	DebugMethodCalls("ListCollection::IterateStart");
 
-	_mIterator = _mFirst;
+	return _mFirst;
 }
 
-void *ListCollection::Iterate()
+void *ListCollection::Iterate(ListElement **iCurrentElement)
 {
 	DebugMethodCalls("ListCollection::Iterate");
 
 	void *lCurrentObject;
 
-	if (_mIterator != nullptr)
+	if (*iCurrentElement != nullptr)
 	{
-		lCurrentObject = _mIterator->_mObject;
-		_mIterator = _mIterator->_mNext;
+		lCurrentObject = (*iCurrentElement)->_mObject;
+		(*iCurrentElement) = (*iCurrentElement)->_mNext;
 		return lCurrentObject;
 	}
 	return nullptr;
