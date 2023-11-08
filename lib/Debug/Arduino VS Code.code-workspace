@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../Users/D028312/OneDrive/Projekte/Frequency Counter/V1.0/Arduino VS Code"
+		},
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"chrono": "cpp",
+			"*.tcc": "cpp",
+			"condition_variable": "cpp",
+			"future": "cpp",
+			"mutex": "cpp",
+			"thread": "cpp"
+		}
+	}
+}

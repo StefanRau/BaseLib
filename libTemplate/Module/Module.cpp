@@ -11,7 +11,6 @@ static Module *gInstance = nullptr;
 Module::Module()
 {
   DebugInstantiation("Module");
-
 }
 
 Module::~Module()
@@ -21,7 +20,7 @@ Module::~Module()
 
 Module *Module::GetInstance()
 {
-  DebugMethodCalls("Application::GetInstance");
+  DebugMethodCalls("Module::GetInstance");
   gInstance = (gInstance == nullptr) ? new Module() : gInstance;
   return gInstance;
 }

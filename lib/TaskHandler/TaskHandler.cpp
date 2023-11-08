@@ -63,17 +63,6 @@ void TaskDispatcher()
 		Task *lTask = (Task *)TaskHandler::GetInstance()->GetTaskList()->Iterate(&lTaskIterator);
 		lTask->Process();
 	}
-
-	// ListElement *lTaskIterator = TaskHandler::GetInstance()->GetTaskList()->IterateStart();
-	// do
-	// {
-	// 	// Ping each single task
-	// 	lTask = (Task *)TaskHandler::GetInstance()->GetTaskList()->Iterate(lTaskIterator);
-	// 	if (lTask != nullptr)
-	// 	{
-	// 		lTask->Process();
-	// 	}
-	// } while (lTask != nullptr);
 }
 
 /////////////////////////////////////////////////////////////

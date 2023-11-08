@@ -26,7 +26,7 @@
 /// <summary>
 /// There is no new EEPROM address required
 /// </summary>
-TextErrorHandler::TextErrorHandler() : TextBase(-1)
+TextErrorHandler::TextErrorHandler() : TextBase()
 {
 	DebugInstantiation("TextErrorHandler");
 }

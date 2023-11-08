@@ -35,7 +35,7 @@
 #define DebugMethodCalls(Text)
 #endif
 
-#if DEBUG_APPLICATION ==2
+#if DEBUG_APPLICATION == 2
 #define DebugStart(Text) Debug::GetInstance(Text)
 #define DebugPrint(Text) Debug::GetInstance()->Print(Text)
 #define DebugPrintLn(Text) Debug::GetInstance()->PrintLn(Text)

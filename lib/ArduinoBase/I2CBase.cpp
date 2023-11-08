@@ -12,7 +12,7 @@
 /// <summary>
 /// There is no new EEPROM address required
 /// </summary>
-TextI2CBase::TextI2CBase() : TextBase(-1)
+TextI2CBase::TextI2CBase() : TextBase()
 {
     DebugInstantiation("TextI2CBase");
 }

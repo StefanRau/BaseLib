@@ -7,8 +7,11 @@
 #ifndef _TextBase_h
 #define _TextBase_h
 
+#include <Arduino.h>
 #include "Debug.h"
-#include "ProjectBase.h"
+
+#define TEXT_DEFAULT_LANGUAGE 'D'
+#define TEXT_VALID_LANGUAGES "DE"
 
 #define TextLangD(Text) \
 	default:            \
@@ -25,36 +28,22 @@
 /// D: German
 /// E: English
 /// </summary>
-class TextBase : public ProjectBase
+class TextBase
 {
-private:
-	const char _cDefaultLanguage = 'D';	  // Defines default langauge
-	const String _cValidLanguages = "DE"; // List of all avallable languages
-	char _mLanguage = _cDefaultLanguage;  // Current language
-	const int _cEepromIndexLanguage = 1;  // Entry used for language
-
-#if DEBUG_APPLICATION == 0
-										 // Remote commands
-	enum eFunctionCode : char
-	{
-		TName = 'L' // Code, if controlled remotely
-	};
-#endif
-
 protected:
 	/// <summary>
 	/// Constructor
 	/// </summary>
-	/// <param name="iSettingsAddress">Address of the EEPROM where language code is stored</param>
-	TextBase(int iSettingsAddress);
+	TextBase();
 	~TextBase();
 
 public:
 	/// <summary>
 	/// Returns a list of all installed languages
 	/// </summary>
+	/// <param name="iVerbose">true: output concatenated language texts; false: output concatenated language codes</param>
 	/// <returns>String with single character language codes</returns>
-	String GetValidLanguages();
+	String GetValidLanguages(bool iVerbose);
 
 	/// <summary>
 	/// Sets a language
@@ -73,22 +62,6 @@ public:
 	/// </summary>
 	/// <returns>Readable name</returns>
 	String GetSelectedLanguageName();
-
-#if DEBUG_APPLICATION == 0
-	/// <summary>
-	/// Dispatches commands got from en external input, e.g. a serial interface
-	/// </summary>
-	/// <param name="iModuleIdentifyer">If this matches with the identifyer of this module, then iParameter is analyzed:
-	/// 'L' : Command for language operations</param>
-	/// <param name="iParameter">Parameter or command that is to be analyzed:
-	/// 'D' : Selects German => returns "D"
-	/// 'E' : Selects English => returns "E"
-	/// '*' : Returns a list of all installed languages => "DE"
-	/// '?' : Returns the current language e.g. "D"
-	/// </param>
-	/// <returns>Reaction of dispatching</returns>
-	String DispatchSerial(char iModuleIdentifyer, char iParameter) override;
-#endif
 
 	/// <summary>
 	/// Returns the readable name of the object where the derivation of this text object is implemented
