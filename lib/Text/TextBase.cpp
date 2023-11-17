@@ -52,9 +52,9 @@ String TextBase::GetSelectedLanguageName()
 {
 	switch (gTextBaseLanguage)
 	{
-	case 'D':
+	case TEXT_LANGUAGE_D:
 		return LanguageGerman();
-	case 'E':
+	case TEXT_LANGUAGE_E:
 		return LanguageEnglish();
 	}
 

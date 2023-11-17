@@ -10,17 +10,54 @@
 #include <Arduino.h>
 #include "Debug.h"
 
-#define TEXT_DEFAULT_LANGUAGE 'D'
+#define TEXT_LANGUAGE_D 'D'
+#define TEXT_LANGUAGE_E 'E'
+#define TEXT_DEFAULT_LANGUAGE TEXT_LANGUAGE_E
 #define TEXT_VALID_LANGUAGES "DE"
 
+#if TEXT_DEFAULT_LANGUAGE == TEXT_LANGUAGE_D
 #define TextLangD(Text) \
 	default:            \
 		return Text;    \
-		break
+		break;
+#define ActionLangD(Target, Text) \
+	default:                      \
+		Text;                     \
+		return Target;            \
+		break;
+#else
+#define TextLangD(Text)   \
+	case TEXT_LANGUAGE_D: \
+		return Text;      \
+		break;
+#define ActionLangD(Target, Text) \
+	case TEXT_LANGUAGE_D:         \
+		Text;                     \
+		return Target;            \
+		break;
+#endif
+
+#if TEXT_DEFAULT_LANGUAGE == TEXT_LANGUAGE_E
 #define TextLangE(Text) \
-	case 'E':           \
+	default:            \
 		return Text;    \
-		break
+		break;
+#define ActionLangE(Target, Text) \
+	default:                      \
+		Text;                     \
+		return Target;            \
+		break;
+#else
+#define TextLangE(Text)   \
+	case TEXT_LANGUAGE_E: \
+		return Text;      \
+		break;
+#define ActionLangE(Target, Text) \
+	case TEXT_LANGUAGE_E:         \
+		Text;                     \
+		return Target;            \
+		break;
+#endif
 
 /// <summary>
 /// This class manages the text handling and languages. Possible is currently German as default language and English optionally.
@@ -69,6 +106,7 @@ public:
 	/// <returns>Object name</returns>
 	virtual String GetObjectName() = 0;
 
+private:
 	String LanguageEnglish();
 	String LanguageGerman();
 };
