@@ -14,12 +14,12 @@
 /// </summary>
 TextI2CBase::TextI2CBase() : TextBase()
 {
-    DebugInstantiation("TextI2CBase");
+    DEBUG_INSTANTIATION("TextI2CBase");
 }
 
 TextI2CBase::~TextI2CBase()
 {
-    DebugDestroy("TextI2CBase");
+    DEBUG_DESTROY("TextI2CBase");
 }
 
 String TextI2CBase::GetObjectName()
@@ -51,7 +51,7 @@ String TextI2CBase::ModuleNotInitialized()
 
 I2CBase::I2CBase(sInitializeModule iInitializeModule) : ProjectBase(iInitializeModule.SettingsAddress, iInitializeModule.NumberOfSettings)
 {
-    DebugInstantiation("I2CBase: iInitializeModule[SettingsAddress, NumberOfSettings, I2CAddress]=[" + String(iInitializeModule.SettingsAddress) + ", " + String(iInitializeModule.NumberOfSettings) + ", " + String(iInitializeModule.I2CAddress) + "]");
+    DEBUG_INSTANTIATION("I2CBase: iInitializeModule[SettingsAddress, NumberOfSettings, I2CAddress]=[" + String(iInitializeModule.SettingsAddress) + ", " + String(iInitializeModule.NumberOfSettings) + ", " + String(iInitializeModule.I2CAddress) + "]");
 
     _mText = new TextI2CBase();
 
@@ -63,7 +63,7 @@ I2CBase::I2CBase(sInitializeModule iInitializeModule) : ProjectBase(iInitializeM
 
 I2CBase::~I2CBase()
 {
-    DebugDestroy("I2CBase");
+    DEBUG_DESTROY("I2CBase");
 }
 
 String I2CBase::GetStatus()

@@ -15,13 +15,13 @@
 
 ListCollection::ListCollection()
 {
-	DebugInstantiation("ListCollection");
+	DEBUG_INSTANTIATION("ListCollection");
 }
 
 ListCollection::~ListCollection()
 {
 	// destroy all list objects and their contained content objects
-	DebugDestroy("ListCollection");
+	DEBUG_DESTROY("ListCollection");
 
 	ListElement *lNextObject;
 	ListElement *lCurrentObject = _mFirst;
@@ -38,13 +38,13 @@ ListCollection::~ListCollection()
 
 ListCollection *ListCollection::GetInstance()
 {
-	DebugMethodCalls("ListCollection::GetInstance");
+	DEBUG_METHOD_CALL("ListCollection::GetInstance");
 	return new ListCollection();
 }
 
 bool ListCollection::Add(void *iObject)
 {
-	DebugMethodCalls("ListCollection::Add");
+	DEBUG_METHOD_CALL("ListCollection::Add");
 
 	ListElement *lNewElement;
 
@@ -69,13 +69,13 @@ bool ListCollection::Add(void *iObject)
 		_mLast = lNewElement;
 	}
 
-	DebugPrintLn("Entry inserted into ListCollection");
+	DEBUG_PRINT_LN("Entry inserted into ListCollection");
 	return true;
 }
 
 bool ListCollection::Delete(int iIndex)
 {
-	DebugMethodCalls("ListCollection::Delete");
+	DEBUG_METHOD_CALL("ListCollection::Delete");
 
 	ListElement *lIterator;
 
@@ -139,25 +139,25 @@ bool ListCollection::Delete(int iIndex)
 	}
 
 	delete lIterator;
-	DebugPrintLn("Entry " + String(iIndex) + " deleted from ListCollection");
+	DEBUG_PRINT_LN("Entry " + String(iIndex) + " deleted from ListCollection");
 	return true;
 }
 
 void *ListCollection::GetFirst()
 {
-	DebugMethodCalls("ListCollection::GetFirst");
+	DEBUG_METHOD_CALL("ListCollection::GetFirst");
 	return _mFirst->_mObject;
 }
 
 void *ListCollection::GetLast()
 {
-	DebugMethodCalls("ListCollection::GetLast");
+	DEBUG_METHOD_CALL("ListCollection::GetLast");
 	return _mLast->_mObject;
 }
 
 void *ListCollection::Get(int iIndex)
 {
-	DebugMethodCalls("ListCollection::Get");
+	DEBUG_METHOD_CALL("ListCollection::Get");
 
 	ListElement *lIterator = GetInternal(iIndex);
 	return (lIterator == nullptr) ? nullptr : lIterator->_mObject;
@@ -165,7 +165,7 @@ void *ListCollection::Get(int iIndex)
 
 ListElement *ListCollection::GetInternal(int iIndex)
 {
-	DebugMethodCalls("ListCollection::GetInternal");
+	DEBUG_METHOD_CALL("ListCollection::GetInternal");
 
 	int lIterator = 0;
 
@@ -184,7 +184,7 @@ ListElement *ListCollection::GetInternal(int iIndex)
 
 void *ListCollection::Filter(bool (*iCallback)(void *))
 {
-	DebugMethodCalls("ListCollection::Filter");
+	DEBUG_METHOD_CALL("ListCollection::Filter");
 
 	ListElement *lIterator = GetInternal(iCallback);
 	return (lIterator == nullptr) ? nullptr : lIterator->_mObject;
@@ -192,7 +192,7 @@ void *ListCollection::Filter(bool (*iCallback)(void *))
 
 ListElement *ListCollection::GetInternal(bool (*iCallback)(void *))
 {
-	DebugMethodCalls("ListCollection::GetInternal");
+	DEBUG_METHOD_CALL("ListCollection::GetInternal");
 
 	int lIterator = 0;
 
@@ -212,7 +212,7 @@ ListElement *ListCollection::GetInternal(bool (*iCallback)(void *))
 
 int ListCollection::Count()
 {
-	DebugMethodCalls("ListCollection::Count");
+	DEBUG_METHOD_CALL("ListCollection::Count");
 
 	int lIterator = 0;
 
@@ -224,14 +224,14 @@ int ListCollection::Count()
 
 ListElement *ListCollection::IterateStart()
 {
-	DebugMethodCalls("ListCollection::IterateStart");
+	DEBUG_METHOD_CALL("ListCollection::IterateStart");
 
 	return _mFirst;
 }
 
 void *ListCollection::Iterate(ListElement **iCurrentElement)
 {
-	DebugMethodCalls("ListCollection::Iterate");
+	DEBUG_METHOD_CALL("ListCollection::Iterate");
 
 	void *lCurrentObject;
 

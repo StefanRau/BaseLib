@@ -9,10 +9,7 @@
 // 11.10.2022: remove text object - Stefan Rau
 // 11.10.2022: baudrate of remote control can be defined by pragma - Stefan Rau
 // 19.10.2022: no usage of String lib anymore => use char and char* only - Stefan Rau
-
-#if defined(ARDUINO_AVR_NANO_EVERY) or defined(ARDUINO_AVR_ATTINYX4)
-// #include <SoftwareSerial.h>
-#endif
+// 05.12.2023: additional output for "const Printable &iOutput"
 
 #include "RemoteControl.h"
 
@@ -106,6 +103,18 @@ void RemoteControl::Write(int iOutput)
     Serial.flush();
 }
 
+void RemoteControl::Write(const Printable &iOutput)
+{
+    Serial.print(iOutput);
+    Serial.flush();
+}
+
+void RemoteControl::Write(String iOutput)
+{
+    Serial.print(iOutput);
+    Serial.flush();
+}
+
 void RemoteControl::WriteLn(char *iOutput)
 {
     Serial.println(iOutput);
@@ -119,6 +128,18 @@ void RemoteControl::WriteLn(const char *iOutput)
 }
 
 void RemoteControl::WriteLn(int iOutput)
+{
+    Serial.println(iOutput);
+    Serial.flush();
+}
+
+void RemoteControl::WriteLn(const Printable &iOutput)
+{
+    Serial.println(iOutput);
+    Serial.flush();
+}
+
+void RemoteControl::WriteLn(String iOutput)
 {
     Serial.println(iOutput);
     Serial.flush();

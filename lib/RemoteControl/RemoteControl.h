@@ -57,6 +57,8 @@ public:
 	void Write(char *iOutput);
 	void Write(const char *iOutput);
 	void Write(int iOutput);
+	void Write(const Printable &iOutput);
+	void Write(String iOutput);
 
 	/// <summary>
 	/// Outputs a string to serial interface with line break
@@ -65,6 +67,8 @@ public:
 	void WriteLn(char *iOutput);
 	void WriteLn(const char *iOutput);
 	void WriteLn(int iOutput);
+	void WriteLn(const Printable &iOutput);
+	void WriteLn(String iOutput);
 
 	/// <summary>
 	/// Outputs a ">" to serial interface

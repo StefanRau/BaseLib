@@ -28,12 +28,12 @@
 /// </summary>
 TextErrorHandler::TextErrorHandler() : TextBase()
 {
-	DebugInstantiation("TextErrorHandler");
+	DEBUG_INSTANTIATION("TextErrorHandler");
 }
 
 TextErrorHandler::~TextErrorHandler()
 {
-	DebugDestroy("TextI2CBase");
+	DEBUG_DESTROY("TextI2CBase");
 }
 
 String TextErrorHandler::GetObjectName()
@@ -132,7 +132,7 @@ String TextErrorHandler::SeverityUnknown()
 
 Error::Error(int iNumber, eSeverity iSeverity, String iErrorMessage)
 {
-	DebugInstantiation("Error: iNumber=" + String(iNumber) + ", iSeverity=" + String((char)iSeverity) + ", iErrorMessage=" + iErrorMessage);
+	DEBUG_INSTANTIATION("Error: iNumber=" + String(iNumber) + ", iSeverity=" + String((char)iSeverity) + ", iErrorMessage=" + iErrorMessage);
 	_mErrorEntry.ErrorHeader.ErrorHeader.Severity = iSeverity;
 	_mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_year = 2000;
 	_mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_mon = 11;
@@ -146,7 +146,7 @@ Error::Error(int iNumber, eSeverity iSeverity, String iErrorMessage)
 
 Error::~Error()
 {
-	DebugDestroy("Error");
+	DEBUG_DESTROY("Error");
 }
 
 Error::sErrorEntry Error::GetErrorEntry()
@@ -161,7 +161,7 @@ static ErrorHandler *gInstance = nullptr;
 ErrorHandler::ErrorHandler(sInitializeModule iInitializeModule) : I2CBase(iInitializeModule)
 {
 
-	DebugInstantiation("ErrorHandler: iInitializeModule[SettingsAddress, I2CAddress]=[" + String(iInitializeModule.SettingsAddress) + ", " + String(iInitializeModule.I2CAddress) + "]");
+	DEBUG_INSTANTIATION("ErrorHandler: iInitializeModule[SettingsAddress, I2CAddress]=[" + String(iInitializeModule.SettingsAddress) + ", " + String(iInitializeModule.I2CAddress) + "]");
 	_mText = new TextErrorHandler();
 
 #ifdef EXTERNAL_EEPROM
@@ -173,7 +173,7 @@ ErrorHandler::ErrorHandler(sInitializeModule iInitializeModule) : I2CBase(iIniti
 		if (!_I2ECheckEEPROMHeader())
 		{
 			// checksum does not match => format EEPROM
-			DebugPrintLn("Format EEPROM");
+			DEBUG_PRINT_LN("Format EEPROM");
 			GetI2CGlobalEEPROM()->setBlock(ErrorHandlerStartAddress, 0, GetI2CGlobalEEPROM()->getDeviceSize() - ErrorHandlerStartAddress);
 
 			// get next count of error entries
@@ -185,16 +185,16 @@ ErrorHandler::ErrorHandler(sInitializeModule iInitializeModule) : I2CBase(iIniti
 		{
 			// Read EEPROM meta data
 			GetI2CGlobalEEPROM()->readBlock(ErrorHandlerStartAddress, lBuffer.Buffer, sizeof(sErrorEEPROMHeader));
-			DebugPrintLn("EEPROM is already formatted - Log Count: " + String(lBuffer.ErrorHeader.NumberOfErrors) + ", Address for writing: " + String(lBuffer.ErrorHeader.NextErrorWritePointer));
+			DEBUG_PRINT_LN("EEPROM is already formatted - Log Count: " + String(lBuffer.ErrorHeader.NumberOfErrors) + ", Address for writing: " + String(lBuffer.ErrorHeader.NextErrorWritePointer));
 		}
 
 		//	Print(Error::eSeverity::TMessage, "EEPROM for logger is initialized");
-		DebugPrintLn("EEPROM for logger is initialized");
+		DEBUG_PRINT_LN("EEPROM for logger is initialized");
 	}
 	else
 	{
 		// Error handler works also without EEPROM but does not persist errors in a log
-		DebugPrintLn("EEPROM for logger can't be initialized");
+		DEBUG_PRINT_LN("EEPROM for logger can't be initialized");
 	}
 #endif
 
@@ -203,7 +203,7 @@ ErrorHandler::ErrorHandler(sInitializeModule iInitializeModule) : I2CBase(iIniti
 
 ErrorHandler::~ErrorHandler()
 {
-	DebugDestroy("ErrorHandler");
+	DEBUG_DESTROY("ErrorHandler");
 }
 
 ErrorHandler *ErrorHandler::GetInstance()
@@ -365,13 +365,13 @@ bool ErrorHandler::_I2EWriteEEPROMHeader(union uErrorEEPROMHeader iBuffer)
 	{
 		// calculate next checksum
 		iBuffer.ErrorHeader.Checksum = _GetEEPROMHeaderChecksum(iBuffer);
-		//	DebugPrint("Write Checksum: " + String(iBuffer.ErrorEntry.Checksum) + ", LastCount: " + String(iBuffer.ErrorEntry.LastCount) + ", StartAddress: " + String(iBuffer.ErrorEntry.StartAddress));
+		//	DEBUG_PRINT("Write Checksum: " + String(iBuffer.ErrorEntry.Checksum) + ", LastCount: " + String(iBuffer.ErrorEntry.LastCount) + ", StartAddress: " + String(iBuffer.ErrorEntry.StartAddress));
 
 		if (GetI2CGlobalEEPROM()->writeBlock(ErrorHandlerStartAddress, iBuffer.Buffer, sizeof(sErrorEEPROMHeader)) != 0)
 		{
 			// EEPROM error => set status back
 			mModuleIsInitialized = false;
-			DebugPrintLn("EEPROM write error");
+			DEBUG_PRINT_LN("EEPROM write error");
 			return false;
 		};
 		return true;
@@ -431,7 +431,7 @@ void ErrorHandler::Print(Error::eSeverity iSeverity, String iErrorMessage)
 		// check if memory is large enough for data
 		if ((lErrorEEPROMHeader.ErrorHeader.NextErrorWritePointer + lMessageLength) > GetI2CGlobalEEPROM()->getDeviceSize() - ErrorHandlerStartAddress)
 		{
-			DebugPrintLn("EEPROM is full");
+			DEBUG_PRINT_LN("EEPROM is full");
 			return;
 		}
 
@@ -440,7 +440,7 @@ void ErrorHandler::Print(Error::eSeverity iSeverity, String iErrorMessage)
 		{
 			// EEPROM error => set status back
 			mModuleIsInitialized = false;
-			DebugPrintLn("EEPROM write error - header");
+			DEBUG_PRINT_LN("EEPROM write error - header");
 			return;
 		};
 		lErrorEEPROMHeader.ErrorHeader.NextErrorWritePointer += sizeof(Error::sErrorHeader);
@@ -450,7 +450,7 @@ void ErrorHandler::Print(Error::eSeverity iSeverity, String iErrorMessage)
 		{
 			// EEPROM error => set status back
 			mModuleIsInitialized = false;
-			DebugPrintLn("EEPROM write error - message");
+			DEBUG_PRINT_LN("EEPROM write error - message");
 			return;
 		};
 		lErrorEEPROMHeader.ErrorHeader.NextErrorWritePointer += lMessageLength;
@@ -460,7 +460,7 @@ void ErrorHandler::Print(Error::eSeverity iSeverity, String iErrorMessage)
 		{
 			// EEPROM error => set status back
 			mModuleIsInitialized = false;
-			DebugPrintLn("EEPROM write error - message terminator");
+			DEBUG_PRINT_LN("EEPROM write error - message terminator");
 			return;
 		};
 

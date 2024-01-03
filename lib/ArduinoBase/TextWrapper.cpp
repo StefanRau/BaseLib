@@ -11,12 +11,12 @@
 /// </summary>
 TextTextWrapper::TextTextWrapper() : TextBase()
 {
-	DebugInstantiation("TextTextWrapper");
+	DEBUG_INSTANTIATION("TextTextWrapper");
 }
 
 TextTextWrapper::~TextTextWrapper()
 {
-	DebugDestroy("TextTextWrapper");
+	DEBUG_DESTROY("TextTextWrapper");
 }
 
 String TextTextWrapper::GetObjectName()
@@ -28,7 +28,7 @@ String TextTextWrapper::GetObjectName()
 
 TextWrapper::TextWrapper(int iSettingsAddress) : ProjectBase(iSettingsAddress, 1)
 {
-	DebugInstantiation("TextWrapper: SettingsAddress=" + String(iSettingsAddress));
+	DEBUG_INSTANTIATION("TextWrapper: SettingsAddress=" + String(iSettingsAddress));
 
 	_mText = new TextTextWrapper();
 
@@ -40,7 +40,7 @@ TextWrapper::TextWrapper(int iSettingsAddress) : ProjectBase(iSettingsAddress, 1
 
 TextWrapper::~TextWrapper()
 {
-	DebugDestroy("TextWrapper");
+	DEBUG_DESTROY("TextWrapper");
 }
 
 #if DEBUG_APPLICATION == 0

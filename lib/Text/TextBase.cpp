@@ -15,12 +15,12 @@ static char gTextBaseLanguage = TEXT_DEFAULT_LANGUAGE; // Stores the language th
 
 TextBase::TextBase()
 {
-	DebugInstantiation("TextBase");
+	DEBUG_INSTANTIATION("TextBase");
 }
 
 TextBase::~TextBase()
 {
-	DebugDestroy("TextBase");
+	DEBUG_DESTROY("TextBase");
 }
 
 String TextBase::GetValidLanguages(bool iVerbose)

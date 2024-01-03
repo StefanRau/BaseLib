@@ -69,7 +69,7 @@ void TaskDispatcher()
 
 TaskHandler::TaskHandler()
 {
-	DebugInstantiation("TaskHandler");
+	DEBUG_INSTANTIATION("TaskHandler");
 
 	_mTaskList = ListCollection::GetInstance();
 
@@ -81,7 +81,7 @@ TaskHandler::TaskHandler()
 
 TaskHandler::~TaskHandler()
 {
-	DebugDestroy("TaskHandler");
+	DEBUG_DESTROY("TaskHandler");
 	delete _mTaskList;
 	// delete lTimer;
 }
@@ -103,11 +103,11 @@ void TaskHandler::SetCycleTimeInMs(unsigned long iCycleTimeInMs)
 		if (lTimer.attachInterruptInterval(iCycleTimeInMs * TIMER1_TICKS_FOR_1_MS, TaskDispatcher))
 #endif
 		{
-			DebugPrintLn("Task timer set");
+			DEBUG_PRINT_LN("Task timer set");
 		}
 		else
 		{
-			DebugPrintLn("Setting Task timer failed");
+			DEBUG_PRINT_LN("Setting Task timer failed");
 		};
 }
 
@@ -120,7 +120,7 @@ ListCollection *TaskHandler::GetTaskList()
 
 Task::Task(Task::eTaskType iTaskType, int iTicks, void (*iCallback)())
 {
-	DebugInstantiation("Task: iTaskType=" + String(iTaskType) + ",iTicks=" + String(iTicks) + ",iCallback=" + String(iCallback == nullptr ? "nullptr" : "valid"));
+	DEBUG_INSTANTIATION("Task: iTaskType=" + String(iTaskType) + ",iTicks=" + String(iTicks) + ",iCallback=" + String(iCallback == nullptr ? "nullptr" : "valid"));
 
 	// Initialize task
 	_mTaskType = iTaskType;
@@ -139,7 +139,7 @@ Task::Task(Task::eTaskType iTaskType, int iTicks, void (*iCallback)())
 
 Task::~Task()
 {
-	DebugDestroy("Task");
+	DEBUG_DESTROY("Task");
 }
 
 Task *Task::GetNewTask(eTaskType iTaskType, int iTicks, void (*iCallback)(void))
@@ -183,7 +183,7 @@ void Task::Process()
 	if (_mTaskCounter <= 0)
 	{
 		// Call registered task handler
-		// DebugPrint("Task: "+ this->
+		// DEBUG_PRINT("Task: "+ this->
 		_mCallback();
 
 		switch (_mTaskType)

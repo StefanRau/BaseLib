@@ -31,7 +31,7 @@ static bool gGlobalEEPROMIsInitialized = false;
 
 ProjectBase::ProjectBase(int iSettingsAddress, int iNumberOfSettings)
 {
-    DebugInstantiation("ProjectBase: iInitializeModule[SettingsAddress, NumberOfSettings]=[" + String(iSettingsAddress) + ", " + String(iNumberOfSettings) + "]");
+    DEBUG_INSTANTIATION("ProjectBase: iInitializeModule[SettingsAddress, NumberOfSettings]=[" + String(iSettingsAddress) + ", " + String(iNumberOfSettings) + "]");
 
 #ifndef NO_EEPROM
 #ifdef EXTERNAL_EEPROM
@@ -58,11 +58,11 @@ ProjectBase::ProjectBase(int iSettingsAddress, int iNumberOfSettings)
 
         if (gI2CGlobalEEPROM != nullptr)
         {
-            DebugPrintLn("EEPROM is initialized");
+            DEBUG_PRINT_LN("EEPROM is initialized");
         }
         else
         {
-            DebugPrintLn("EEPROM is not initialized");
+            DEBUG_PRINT_LN("EEPROM is not initialized");
         }
 
         gGlobalEEPROMIsInitialized = true;
@@ -81,7 +81,7 @@ ProjectBase::ProjectBase(int iSettingsAddress, int iNumberOfSettings)
         else
         {
             // ErrorPrint(Error::eSeverity::TFatal, _mText->InconsistentParameters());
-            DebugPrintLn("Implementation error: parameter iNumberOfSettings must be set to a value > 0");
+            DEBUG_PRINT_LN("Implementation error: parameter iNumberOfSettings must be set to a value > 0");
             return;
         }
     }
@@ -91,12 +91,12 @@ ProjectBase::ProjectBase(int iSettingsAddress, int iNumberOfSettings)
 
 ProjectBase::ProjectBase()
 {
-    DebugInstantiation("New ProjectBase");
+    DEBUG_INSTANTIATION("New ProjectBase");
 }
 
 ProjectBase::~ProjectBase()
 {
-    DebugDestroy("ProjectBase");
+    DEBUG_DESTROY("ProjectBase");
 }
 
 #ifdef EXTERNAL_EEPROM
@@ -140,7 +140,7 @@ void ProjectBase::SetSetting(int iSettingNumber, char iValue)
 #endif
 #endif
     }
-    DebugPrintLn("Set Setting: " + String(_mSettingAdddress) + ", " + String(iValue));
+    DEBUG_PRINT_LN("Set Setting: " + String(_mSettingAdddress) + ", " + String(iValue));
 #endif
 }
 
@@ -162,7 +162,7 @@ char ProjectBase::GetSetting(int iSettingNumber)
 #endif
 #endif
     }
-    DebugPrintLn("Get Setting: " + String(_mSettingAdddress) + ", " + String(lSetting));
+    DEBUG_PRINT_LN("Get Setting: " + String(_mSettingAdddress) + ", " + String(lSetting));
 #endif
 
     return lSetting;
