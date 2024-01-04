@@ -107,9 +107,8 @@ private:
 	/// </summary>
 	ListCollection();
 
-	ListElement *_mFirst = nullptr; // pointer to 1st element of the list
-	ListElement *_mLast = nullptr;	// pointer to last element of the list
-	// ListElement *_mIterator = nullptr; // iterator for iterating through a list
+	ListElement *mFirst = nullptr; // pointer to 1st element of the list
+	ListElement *mLast = nullptr;	// pointer to last element of the list
 
 	/// <summary>
 	/// Gets the ListElement at the index
