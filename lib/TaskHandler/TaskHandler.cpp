@@ -71,7 +71,7 @@ TaskHandler::TaskHandler()
 {
 	DEBUG_INSTANTIATION("TaskHandler");
 
-	_mTaskList = ListCollection::GetInstance();
+	mTaskList = ListCollection::GetInstance();
 
 	// Initialize timer
 #ifdef ARDUINO_AVR_NANO_EVERY
@@ -82,12 +82,14 @@ TaskHandler::TaskHandler()
 TaskHandler::~TaskHandler()
 {
 	DEBUG_DESTROY("TaskHandler");
-	delete _mTaskList;
+	delete mTaskList;
 	// delete lTimer;
 }
 
 TaskHandler *TaskHandler::GetInstance()
 {
+	DEBUG_METHOD_CALL("TaskHandler::GetInstance");
+
 	// Returns a pointer to singleton instance
 	gInstance = (gInstance == nullptr) ? new TaskHandler : gInstance;
 	return gInstance;
@@ -95,6 +97,8 @@ TaskHandler *TaskHandler::GetInstance()
 
 void TaskHandler::SetCycleTimeInMs(unsigned long iCycleTimeInMs)
 {
+	DEBUG_METHOD_CALL("TaskHandler::SetCycleTimeInMs");
+
 	// Initialize hardware timer
 #ifdef ARDUINO_SAMD_NANO_33_IOT
 	if (lTimer.attachInterruptInterval((float)iCycleTimeInMs * TIMER1_TICKS_FOR_1_MS, TaskDispatcher))
@@ -113,7 +117,7 @@ void TaskHandler::SetCycleTimeInMs(unsigned long iCycleTimeInMs)
 
 ListCollection *TaskHandler::GetTaskList()
 {
-	return _mTaskList;
+	return mTaskList;
 }
 
 /////////////////////////////////////////////////////////////
@@ -123,18 +127,18 @@ Task::Task(Task::eTaskType iTaskType, int iTicks, void (*iCallback)())
 	DEBUG_INSTANTIATION("Task: iTaskType=" + String(iTaskType) + ",iTicks=" + String(iTicks) + ",iCallback=" + String(iCallback == nullptr ? "nullptr" : "valid"));
 
 	// Initialize task
-	_mTaskType = iTaskType;
-	_mTicks = iTicks;
-	_mTaskCounter = _mTicks;
-	if (iTaskType == TTriggerOneTime)
+	mTaskType = iTaskType;
+	mTicks = iTicks;
+	mTaskCounter = mTicks;
+	if (iTaskType == Task::eTaskType::TTriggerOneTime)
 	{
-		_mTaskState = TWaiting;
+		mTaskState = Task::eTaskState::TWaiting;
 	}
 	else
 	{
-		_mTaskState = TRunning;
+		mTaskState = Task::eTaskState::TRunning;
 	}
-	_mCallback = iCallback;
+	mCallback = iCallback;
 }
 
 Task::~Task()
@@ -144,6 +148,8 @@ Task::~Task()
 
 Task *Task::GetNewTask(eTaskType iTaskType, int iTicks, void (*iCallback)(void))
 {
+	DEBUG_METHOD_CALL("Task::GetNewTask");
+
 	Task *lTask;
 
 	lTask = new Task(iTaskType, iTicks, iCallback);
@@ -156,21 +162,23 @@ Task *Task::GetNewTask(eTaskType iTaskType, int iTicks, void (*iCallback)(void))
 
 void Task::Process()
 {
+	DEBUG_METHOD_CALL("Task::Process");
+
 	// Process a single task
 
 	// Check if the task is done or waiting for a trigger
-	if ((_mTaskState == TDone) || (_mTaskState == TWaiting))
+	if ((mTaskState == Task::eTaskState::TDone) || (mTaskState == Task::eTaskState::TWaiting))
 	{
 		return;
 	}
 
 	// Check dependency of tasks
-	if ((_mTaskType == Task::TFollowUpCyclic) || (_mTaskType == Task::TFollowUpOneTime))
+	if ((mTaskType == Task::eTaskType::TFollowUpCyclic) || (mTaskType == Task::eTaskType::TFollowUpOneTime))
 	{
 		// The previous task must be done
-		if (_mPreviouslyProcessed != nullptr)
+		if (mPreviouslyProcessed != nullptr)
 		{
-			if (_mPreviouslyProcessed->_mTaskState != Task::TDone)
+			if (mPreviouslyProcessed->mTaskState != Task::eTaskState::TDone)
 			{
 				return;
 			}
@@ -178,30 +186,30 @@ void Task::Process()
 	}
 
 	// Count down
-	_mTaskCounter -= 1;
+	mTaskCounter -= 1;
 
-	if (_mTaskCounter <= 0)
+	if (mTaskCounter <= 0)
 	{
 		// Call registered task handler
 		// DEBUG_PRINT("Task: "+ this->
-		_mCallback();
+		mCallback();
 
-		switch (_mTaskType)
+		switch (mTaskType)
 		{
-		case TCyclic:
-		case TFollowUpCyclic:
+		case Task::eTaskType::TCyclic:
+		case Task::eTaskType::TFollowUpCyclic:
 			// Restart a cyclic task
-			_mTaskCounter = _mTicks;
+			mTaskCounter = mTicks;
 			break;
 
-		case TTriggerOneTime:
+		case Task::eTaskType::TTriggerOneTime:
 			// Set a startable task to waiting
-			_mTaskState = TWaiting;
+			mTaskState = Task::eTaskState::TWaiting;
 			break;
 
 		default:
 			// End this task
-			_mTaskState = TDone;
+			mTaskState = Task::eTaskState::TDone;
 			break;
 		}
 	}
@@ -209,23 +217,29 @@ void Task::Process()
 
 void Task::DefinePrevious(Task *iPreviouslyProcessed)
 {
-	_mPreviouslyProcessed = iPreviouslyProcessed;
+	DEBUG_METHOD_CALL("Task::DefinePrevious");
+
+	mPreviouslyProcessed = iPreviouslyProcessed;
 }
 
 void Task::Start()
 {
-	if (_mTaskState == TWaiting)
+	DEBUG_METHOD_CALL("Task::Start");
+
+	if (mTaskState == Task::eTaskState::TWaiting)
 	{
-		_mTaskState = TRunning;
-		_mTaskCounter = _mTicks;
+		mTaskState = Task::eTaskState::TRunning;
+		mTaskCounter = mTicks;
 	}
 }
 
 void Task::Restart()
 {
-	if ((_mTaskState == TWaiting) || (_mTaskState == TRunning))
+	DEBUG_METHOD_CALL("Task::Restart");
+
+	if ((mTaskState == Task::eTaskState::TWaiting) || (mTaskState == Task::eTaskState::TRunning))
 	{
-		_mTaskState = TRunning;
-		_mTaskCounter = _mTicks;
+		mTaskState = Task::eTaskState::TRunning;
+		mTaskCounter = mTicks;
 	}
 }

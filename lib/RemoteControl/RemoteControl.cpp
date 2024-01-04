@@ -23,11 +23,11 @@ RemoteControl::RemoteControl(char *iBuffer, uint8_t iBufflen)
     delay(10);
     Serial.println("SRC");
     Serial.flush();
-    _mWritePosition = 0;
-    _mOverflowDetected = false;
-    _mEndDetected = false;
-    _mBuffer = iBuffer;
-    _mBufflen = iBufflen;
+    mWritePosition = 0;
+    mOverflowDetected = false;
+    mEndDetected = false;
+    mBuffer = iBuffer;
+    mBufflen = iBufflen;
 }
 
 RemoteControl::~RemoteControl()
@@ -50,7 +50,7 @@ bool RemoteControl::Available()
     lChar = Serial.read();
 
     // If end of string is already detected, all further receipts are ignored
-    if (_mEndDetected | _mOverflowDetected)
+    if (mEndDetected | mOverflowDetected)
     {
         return true;
     }
@@ -61,7 +61,7 @@ bool RemoteControl::Available()
         Serial.println('#'); // Acknowledge receipt of string end
         Serial.flush();
         WriteChar(0);
-        _mEndDetected = true;
+        mEndDetected = true;
         return true;
     }
 
@@ -79,10 +79,10 @@ bool RemoteControl::Available()
 void RemoteControl::Read()
 {
     // Reset string
-    _mEndDetected = false;
-    _mOverflowDetected = false;
-    _mWritePosition = 0;
-    _mBuffer[0] = 0;
+    mEndDetected = false;
+    mOverflowDetected = false;
+    mWritePosition = 0;
+    mBuffer[0] = 0;
 }
 
 void RemoteControl::Write(char *iOutput)
@@ -154,13 +154,13 @@ void RemoteControl::WaitForInput()
 void RemoteControl::WriteChar(char iChar)
 {
     // check for buffer overflow
-    if (_mWritePosition >= _mBufflen)
+    if (mWritePosition >= mBufflen)
     {
-        _mOverflowDetected = true;
+        mOverflowDetected = true;
     }
     else
     {
-        _mBuffer[_mWritePosition++] = iChar;
+        mBuffer[mWritePosition++] = iChar;
     }
 }
 

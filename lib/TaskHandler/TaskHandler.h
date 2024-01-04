@@ -27,7 +27,7 @@
 class Task
 {
 public:
-    enum eTaskType : char
+    enum class eTaskType : char
     {
         TOneTime = 'O',         // This task runs only once
         TCyclic = 'C',          // This task runs ever and ever again
@@ -36,32 +36,6 @@ public:
         TTriggerOneTime = 'T'   // Task runs a defined time after a trigger is recognized
     };
 
-private:
-    enum _eTaskState : char
-    {
-        TWaiting = 'W', // the current task is waiting for being processed
-        TRunning = 'R', // the current task is currently running
-        TDone = 'D'     // the current task has ended
-    };
-
-    volatile _eTaskState _mTaskState; // current state of the task
-    volatile eTaskType _mTaskType;    // type of the current task
-    volatile int _mTaskCounter;       // internal counter for ticks (starts with _mTicks and then counts down to 0)
-    volatile int _mTicks;             // number of internal timer cycles
-
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    /// <param name="iTaskType">Kind of task</param>
-    /// <param name="iTicks">Number of ticks relevant for that task - depending on iTaskType, it can control the cycle time or time until a task starts</param>
-    /// <param name="iCallback">Address of the function implementing the task handler</param>
-    Task(eTaskType iTaskType, int iTicks, void (*iCallback)());
-    ~Task();
-
-    volatile Task *_mPreviouslyProcessed = nullptr; // Previous task
-    void (*_mCallback)();                           // Address of the function implementing the task handler
-
-public:
     static Task *GetNewTask(eTaskType iTaskType, int iTicks, void (*iCallback)(void));
 
     /// <summary>
@@ -84,6 +58,31 @@ public:
     /// Starts a task, although it's already running
     /// </summary>
     void Restart();
+
+private:
+    enum class eTaskState : char
+    {
+        TWaiting = 'W', // the current task is waiting for being processed
+        TRunning = 'R', // the current task is currently running
+        TDone = 'D'     // the current task has ended
+    };
+
+    volatile eTaskState mTaskState; // current state of the task
+    volatile eTaskType mTaskType;   // type of the current task
+    volatile int mTaskCounter;      // internal counter for ticks (starts with _mTicks and then counts down to 0)
+    volatile int mTicks;            // number of internal timer cycles
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="iTaskType">Kind of task</param>
+    /// <param name="iTicks">Number of ticks relevant for that task - depending on iTaskType, it can control the cycle time or time until a task starts</param>
+    /// <param name="iCallback">Address of the function implementing the task handler</param>
+    Task(eTaskType iTaskType, int iTicks, void (*iCallback)());
+    ~Task();
+
+    volatile Task *mPreviouslyProcessed = nullptr; // Previous task
+    void (*mCallback)();                           // Address of the function implementing the task handler
 };
 
 /// <summary>
@@ -91,15 +90,6 @@ public:
 /// </summary>
 class TaskHandler
 {
-private:
-    ListCollection *_mTaskList; // List object containing the tasks
-
-    /// <summary>
-    /// Constructor
-    /// </summary>
-    TaskHandler();
-    ~TaskHandler();
-
 public:
     /// <summary>
     /// Factory for managing single instances
@@ -118,6 +108,15 @@ public:
     /// </summary>
     /// <returns>Instance of object collection</returns>
     ListCollection *GetTaskList();
+
+private:
+    ListCollection *mTaskList; // List object containing the tasks
+
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    TaskHandler();
+    ~TaskHandler();
 };
 
 #endif

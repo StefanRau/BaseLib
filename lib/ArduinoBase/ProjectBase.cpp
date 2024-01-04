@@ -20,7 +20,7 @@
 #include "ProjectBase.h"
 
 #if DEBUG_APPLICATION == 0
-static bool _gVerboseMode = false; // returns results of dispatcher - true: in details, false: as single letter code
+static bool gVerboseMode = false; // returns results of dispatcher - true: in details, false: as single letter code
 #endif
 
 #ifdef EXTERNAL_EEPROM
@@ -72,11 +72,11 @@ ProjectBase::ProjectBase(int iSettingsAddress, int iNumberOfSettings)
     // Stores settings address of the object only if address is valid
     if (iSettingsAddress >= 0)
     {
-        _mSettingAdddress = iSettingsAddress;
+        mSettingAdddress = iSettingsAddress;
 
         if (iNumberOfSettings > 0)
         {
-            _mNumberOfSettings = iNumberOfSettings;
+            mNumberOfSettings = iNumberOfSettings;
         }
         else
         {
@@ -114,12 +114,12 @@ I2C_eeprom *ProjectBase::GetI2CGlobalEEPROM()
 #if DEBUG_APPLICATION == 0
 void ProjectBase::SetVerboseMode(bool iVerboseMode)
 {
-    _gVerboseMode = iVerboseMode;
+    gVerboseMode = iVerboseMode;
 }
 
 bool ProjectBase::GetVerboseMode()
 {
-    return _gVerboseMode;
+    return gVerboseMode;
 }
 #endif
 
@@ -127,7 +127,7 @@ void ProjectBase::SetSetting(int iSettingNumber, char iValue)
 {
 #ifndef NO_EEPROM
     // Settings address and value must be valid
-    if ((_mSettingAdddress >= 0) && (iSettingNumber > 0) && (iSettingNumber <= _mNumberOfSettings) && (iValue != cNullSetting))
+    if ((mSettingAdddress >= 0) && (iSettingNumber > 0) && (iSettingNumber <= mNumberOfSettings) && (iValue != cNullSetting))
     {
 #ifdef INTERNAL_EEPROM
         EEPROM.write(iSettingNumber, iValue);
@@ -135,12 +135,12 @@ void ProjectBase::SetSetting(int iSettingNumber, char iValue)
 #ifdef EXTERNAL_EEPROM
         if (gI2CGlobalEEPROM != nullptr)
         {
-            gI2CGlobalEEPROM->updateByte(_mSettingAdddress + iSettingNumber - 1, iValue);
+            gI2CGlobalEEPROM->updateByte(mSettingAdddress + iSettingNumber - 1, iValue);
         }
 #endif
 #endif
     }
-    DEBUG_PRINT_LN("Set Setting: " + String(_mSettingAdddress) + ", " + String(iValue));
+    DEBUG_PRINT_LN("Set Setting: " + String(mSettingAdddress) + ", " + String(iValue));
 #endif
 }
 
@@ -149,7 +149,7 @@ char ProjectBase::GetSetting(int iSettingNumber)
     char lSetting = cNullSetting;
 
 #ifndef NO_EEPROM
-    if ((_mSettingAdddress >= 0) && (iSettingNumber > 0) && (iSettingNumber <= _mNumberOfSettings))
+    if ((mSettingAdddress >= 0) && (iSettingNumber > 0) && (iSettingNumber <= mNumberOfSettings))
     {
 #ifdef INTERNAL_EEPROM
         lSetting = EEPROM.read(iSettingNumber);
@@ -157,12 +157,12 @@ char ProjectBase::GetSetting(int iSettingNumber)
 #ifdef EXTERNAL_EEPROM
         if (gI2CGlobalEEPROM != nullptr)
         {
-            lSetting = gI2CGlobalEEPROM->readByte(_mSettingAdddress + iSettingNumber - 1);
+            lSetting = gI2CGlobalEEPROM->readByte(mSettingAdddress + iSettingNumber - 1);
         }
 #endif
 #endif
     }
-    DEBUG_PRINT_LN("Get Setting: " + String(_mSettingAdddress) + ", " + String(lSetting));
+    DEBUG_PRINT_LN("Get Setting: " + String(mSettingAdddress) + ", " + String(lSetting));
 #endif
 
     return lSetting;

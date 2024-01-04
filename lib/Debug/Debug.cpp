@@ -130,7 +130,6 @@ void Debug::BinaryDump(void *iData, size_t iLength)
 	int lCharCount = 0;
 	int lHexCount = 0;
 
-	// noInterrupts();
 	Serial.println(">>>>>>>>>>>>>>>> Binary dump start");
 	Serial.print("Length: ");
 	Serial.println(iLength);
@@ -186,28 +185,24 @@ void Debug::BinaryDump(void *iData, size_t iLength)
 
 	// Wait until buffer is empty
 	Serial.flush();
-	// interrupts();
 }
 
 void Debug::PrintFromTask(String iOutput)
 {
 	// Write into a string buffer
-	_mWriteBuffer += iOutput;
-	_mBufferContainsData = true;
+	mWriteBuffer += iOutput;
+	mBufferContainsData = true;
 }
 
 void Debug::loop()
 {
-	if (_mBufferContainsData)
+	if (mBufferContainsData)
 	{
-		// noInterrupts();
-		Serial.print(_mWriteBuffer);
-		// Serial.println();
+		Serial.print(mWriteBuffer);
 		//  Wait until buffer is empty
 		Serial.flush();
-		_mWriteBuffer = "";
-		_mBufferContainsData = false;
-		// interrupts();
+		mWriteBuffer = "";
+		mBufferContainsData = false;
 	}
 }
 

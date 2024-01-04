@@ -67,13 +67,6 @@
 /// </summary>
 class TextBase
 {
-protected:
-	/// <summary>
-	/// Constructor
-	/// </summary>
-	TextBase();
-	~TextBase();
-
 public:
 	/// <summary>
 	/// Returns a list of all installed languages
@@ -105,6 +98,13 @@ public:
 	/// </summary>
 	/// <returns>Object name</returns>
 	virtual String GetObjectName() = 0;
+
+protected:
+	/// <summary>
+	/// Constructor
+	/// </summary>
+	TextBase();
+	~TextBase();
 
 private:
 	String LanguageEnglish();

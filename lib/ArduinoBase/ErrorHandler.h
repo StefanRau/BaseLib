@@ -52,7 +52,7 @@ public:
 	/// <summary>
 	/// Error severity
 	/// </summary>
-	enum eSeverity : char
+	enum class eSeverity : char
 	{
 		TMessage = 'M',
 		TWarning = 'W',
@@ -80,7 +80,7 @@ public:
 	};
 
 private:
-	sErrorEntry _mErrorEntry; // Text of the current error message
+	sErrorEntry mErrorEntry; // Text of the current error message
 
 public:
 	/// <summary>
@@ -98,14 +98,14 @@ public:
 	sErrorEntry GetErrorEntry();
 };
 
-#define ErrorPrint(iSeverity, iErrorMessage) ErrorHandler::GetInstance()->Print(iSeverity, iErrorMessage)
-#define ErrorDetected() ErrorHandler::GetInstance()->ContainsErrors()
+#define ERROR_PRINT(iSeverity, iErrorMessage) ErrorHandler::GetInstance()->Print(iSeverity, iErrorMessage)
+#define ERROR_DETECTED() ErrorHandler::GetInstance()->ContainsErrors()
 
 #if defined(ARDUINO_AVR_NANO_EVERY) or defined(ARDUINO_AVR_ATTINYX4) or defined(ARDUINO_AVR_ATTINYX5) or defined(ARDUINO_AVR_ATmega8) or defined(ARDUINO_AVR_DIGISPARK)
-#define ErrorHandlerStartAddress 0x000 // uses internal EEPROM for settings
+#define ERROR_HANDLER_START_ADDRESS 0x000 // uses internal EEPROM for settings
 #endif
 #if defined(ARDUINO_SAMD_NANO_33_IOT) or defined(ARDUINO_ARDUINO_NANO33BLE) or defined(ARDUINO_NANO_RP2040_CONNECT)
-#define ErrorHandlerStartAddress 0x0100 // 1st address for logging
+#define ERROR_HANDLER_START_ADDRESS 0x0100 // 1st address for logging
 #endif
 
 class ErrorHandler : public I2CBase
@@ -124,14 +124,14 @@ private:
 		uint8_t Buffer[sizeof(sErrorEEPROMHeader)];
 	};
 
-	TextErrorHandler *_mText = nullptr;													// Pointer to current text objekt of the class
-	int _mEEPROMMemoryIterator = sizeof(sErrorEEPROMHeader) + ErrorHandlerStartAddress; // pointer to address of next error log item, initially that's the bype after the last entry of header
-	int _mEEPROMErrorIterator = 0;														// number of next error log item
-	bool _mErrorDetected = false;														// signals that an error was detected
+	TextErrorHandler *_mText = nullptr;													   // Pointer to current text objekt of the class
+	int mEEPROMMemoryIterator = sizeof(sErrorEEPROMHeader) + ERROR_HANDLER_START_ADDRESS; // pointer to address of next error log item, initially that's the bype after the last entry of header
+	int mEEPROMErrorIterator = 0;														   // number of next error log item
+	bool mErrorDetected = false;														   // signals that an error was detected
 
 #if DEBUG_APPLICATION == 0
 	// Commands for remote control
-	enum eFunctionCode : char
+	enum class eFunctionCode : char
 	{
 		TName = 'E',	  // Code for this class, if controlled remotely
 		TFormat = 'F',	  // Formatting of EEPROM
@@ -172,14 +172,14 @@ private:
 	/// Checks the header of the logger EEPROM
 	/// </summary>
 	/// <returns>true: EEPROM is o.k., false: EEPROM is not o.k.</returns>
-	bool _I2ECheckEEPROMHeader();
+	bool I2ECheckEEPROMHeader();
 
 	/// <summary>
 	/// Writes the header of the logger EEPROM
 	/// </summary>
 	/// <param name="iBuffer">Header to write</param>
 	/// <returns>true: EEPROM is o.k., false: EEPROM is not o.k.</returns>
-	bool _I2EWriteEEPROMHeader(union uErrorEEPROMHeader iBuffer);
+	bool I2EWriteEEPROMHeader(union uErrorEEPROMHeader iBuffer);
 
 	// Functions that can be called from everywhere
 
@@ -187,7 +187,7 @@ private:
 	/// Returns the check sum of the EEPROM header
 	/// </summary>
 	/// <returns>checksum value</returns>
-	char _GetEEPROMHeaderChecksum(union uErrorEEPROMHeader iBuffer);
+	char GetEEPROMHeaderChecksum(union uErrorEEPROMHeader iBuffer);
 #endif
 
 public:

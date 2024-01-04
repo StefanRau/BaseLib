@@ -133,15 +133,15 @@ String TextErrorHandler::SeverityUnknown()
 Error::Error(int iNumber, eSeverity iSeverity, String iErrorMessage)
 {
 	DEBUG_INSTANTIATION("Error: iNumber=" + String(iNumber) + ", iSeverity=" + String((char)iSeverity) + ", iErrorMessage=" + iErrorMessage);
-	_mErrorEntry.ErrorHeader.ErrorHeader.Severity = iSeverity;
-	_mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_year = 2000;
-	_mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_mon = 11;
-	_mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_mday = 13;
-	_mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_hour = 19;
-	_mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_min = 15;
-	_mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_sec = 0;
-	_mErrorEntry.ErrorHeader.ErrorHeader.Count = iNumber;
-	_mErrorEntry.ErrorMessage = iErrorMessage;
+	mErrorEntry.ErrorHeader.ErrorHeader.Severity = iSeverity;
+	mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_year = 2000;
+	mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_mon = 11;
+	mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_mday = 13;
+	mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_hour = 19;
+	mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_min = 15;
+	mErrorEntry.ErrorHeader.ErrorHeader.Time.tm_sec = 0;
+	mErrorEntry.ErrorHeader.ErrorHeader.Count = iNumber;
+	mErrorEntry.ErrorMessage = iErrorMessage;
 }
 
 Error::~Error()
@@ -151,7 +151,7 @@ Error::~Error()
 
 Error::sErrorEntry Error::GetErrorEntry()
 {
-	return _mErrorEntry;
+	return mErrorEntry;
 }
 
 /////////////////////////////////////////////////////////////
@@ -170,21 +170,21 @@ ErrorHandler::ErrorHandler(sInitializeModule iInitializeModule) : I2CBase(iIniti
 	if (GetI2CGlobalEEPROM() != nullptr)
 	{
 		// get checksum
-		if (!_I2ECheckEEPROMHeader())
+		if (!I2ECheckEEPROMHeader())
 		{
 			// checksum does not match => format EEPROM
 			DEBUG_PRINT_LN("Format EEPROM");
-			GetI2CGlobalEEPROM()->setBlock(ErrorHandlerStartAddress, 0, GetI2CGlobalEEPROM()->getDeviceSize() - ErrorHandlerStartAddress);
+			GetI2CGlobalEEPROM()->setBlock(ERROR_HANDLER_START_ADDRESS, 0, GetI2CGlobalEEPROM()->getDeviceSize() - ERROR_HANDLER_START_ADDRESS);
 
 			// get next count of error entries
 			lBuffer.ErrorHeader.NumberOfErrors = 0;
-			lBuffer.ErrorHeader.NextErrorWritePointer = sizeof(sErrorEEPROMHeader) + ErrorHandlerStartAddress;
-			_I2EWriteEEPROMHeader(lBuffer);
+			lBuffer.ErrorHeader.NextErrorWritePointer = sizeof(sErrorEEPROMHeader) + ERROR_HANDLER_START_ADDRESS;
+			I2EWriteEEPROMHeader(lBuffer);
 		}
 		else
 		{
 			// Read EEPROM meta data
-			GetI2CGlobalEEPROM()->readBlock(ErrorHandlerStartAddress, lBuffer.Buffer, sizeof(sErrorEEPROMHeader));
+			GetI2CGlobalEEPROM()->readBlock(ERROR_HANDLER_START_ADDRESS, lBuffer.Buffer, sizeof(sErrorEEPROMHeader));
 			DEBUG_PRINT_LN("EEPROM is already formatted - Log Count: " + String(lBuffer.ErrorHeader.NumberOfErrors) + ", Address for writing: " + String(lBuffer.ErrorHeader.NextErrorWritePointer));
 		}
 
@@ -208,6 +208,8 @@ ErrorHandler::~ErrorHandler()
 
 ErrorHandler *ErrorHandler::GetInstance()
 {
+	DEBUG_METHOD_CALL("ErrorHandler::GetInstance");
+
 	// returns a pointer to singleton instance
 	sInitializeModule lInitializeModule = {-1, -1};
 
@@ -223,21 +225,23 @@ void ErrorHandler::loop()
 #if DEBUG_APPLICATION == 0
 String ErrorHandler::DispatchSerial(char iModuleIdentifyer, char iParameter)
 {
+	DEBUG_METHOD_CALL("ErrorHandler::DispatchSerial");
+
 #ifdef EXTERNAL_EEPROM
 	union uErrorEEPROMHeader lErrorEepromHeader;
 	String lReturn = "";
 
 	if (GetI2CGlobalEEPROM() != nullptr)
 	{
-		GetI2CGlobalEEPROM()->readBlock(ErrorHandlerStartAddress, lErrorEepromHeader.Buffer, sizeof(sErrorEEPROMHeader));
+		GetI2CGlobalEEPROM()->readBlock(ERROR_HANDLER_START_ADDRESS, lErrorEepromHeader.Buffer, sizeof(sErrorEEPROMHeader));
 
-		switch (iModuleIdentifyer)
+		switch ((ErrorHandler::eFunctionCode)iModuleIdentifyer)
 		{
-		case TName:
+		case ErrorHandler::eFunctionCode::TName:
 
-			switch (iParameter)
+			switch ((ErrorHandler::eFunctionCode)iParameter)
 			{
-			case TReadNext:
+			case ErrorHandler::eFunctionCode::TReadNext:
 				// get header
 				union Error::uErrorHeader lErrorHeader;
 				char lTimeString[50];
@@ -245,11 +249,11 @@ String ErrorHandler::DispatchSerial(char iModuleIdentifyer, char iParameter)
 
 				lTimeStringP = lTimeString;
 
-				GetI2CGlobalEEPROM()->readBlock(_mEEPROMMemoryIterator, lErrorHeader.Buffer, sizeof(Error::sErrorHeader));
-				_mEEPROMMemoryIterator += sizeof(Error::sErrorHeader); // + ErrorHandlerStartAddress;
+				GetI2CGlobalEEPROM()->readBlock(mEEPROMMemoryIterator, lErrorHeader.Buffer, sizeof(Error::sErrorHeader));
+				mEEPROMMemoryIterator += sizeof(Error::sErrorHeader); // + ERROR_HANDLER_START_ADDRESS;
 
 				// Error count
-				lReturn = String(_mEEPROMErrorIterator);
+				lReturn = String(mEEPROMErrorIterator);
 				lReturn += ": ";
 
 				// Timestamp of the error
@@ -265,16 +269,16 @@ String ErrorHandler::DispatchSerial(char iModuleIdentifyer, char iParameter)
 				// Severity
 				switch (lErrorHeader.ErrorHeader.Severity)
 				{
-				case Error::TMessage:
+				case Error::eSeverity ::TMessage:
 					lReturn += _mText->SeverityMessage();
 					break;
-				case Error::TWarning:
+				case Error::eSeverity::TWarning:
 					lReturn += _mText->SeverityWarning();
 					break;
-				case Error::TError:
+				case Error::eSeverity::TError:
 					lReturn += _mText->SeverityError();
 					break;
-				case Error::TFatal:
+				case Error::eSeverity::TFatal:
 					lReturn += _mText->SeverityFatal();
 					break;
 				default:
@@ -284,12 +288,12 @@ String ErrorHandler::DispatchSerial(char iModuleIdentifyer, char iParameter)
 				lReturn += ": ";
 
 				// get error message
-				if (_mEEPROMErrorIterator < lErrorEepromHeader.ErrorHeader.NumberOfErrors)
+				if (mEEPROMErrorIterator < lErrorEepromHeader.ErrorHeader.NumberOfErrors)
 				{
 					char lChar;
 					do
 					{
-						lChar = (char)GetI2CGlobalEEPROM()->readByte(_mEEPROMMemoryIterator++);
+						lChar = (char)GetI2CGlobalEEPROM()->readByte(mEEPROMMemoryIterator++);
 						if (lChar != 0)
 						{
 							lReturn += String(lChar);
@@ -297,7 +301,7 @@ String ErrorHandler::DispatchSerial(char iModuleIdentifyer, char iParameter)
 					} while (lChar != 0);
 
 					lReturn += "\n";
-					_mEEPROMErrorIterator += 1;
+					mEEPROMErrorIterator += 1;
 					return lReturn;
 				}
 				else
@@ -305,29 +309,29 @@ String ErrorHandler::DispatchSerial(char iModuleIdentifyer, char iParameter)
 					return _mText->ErrorListDone();
 				};
 				break;
-			case TReadReset:
-				_mEEPROMErrorIterator = 0;
-				_mEEPROMMemoryIterator = sizeof(sErrorEEPROMHeader) + ErrorHandlerStartAddress; // starting point of memory iteration is after last byte of header
+			case ErrorHandler::eFunctionCode::TReadReset:
+				mEEPROMErrorIterator = 0;
+				mEEPROMMemoryIterator = sizeof(sErrorEEPROMHeader) + ERROR_HANDLER_START_ADDRESS; // starting point of memory iteration is after last byte of header
 				return String(iParameter);
 				break;
-			case TReadSize:
+			case ErrorHandler::eFunctionCode::TReadSize:
 				lReturn = String(lErrorEepromHeader.ErrorHeader.NumberOfErrors);
 				return lReturn;
 				break;
-			case TFormat:
-				if (GetI2CGlobalEEPROM()->setBlock(ErrorHandlerStartAddress, 0, GetI2CGlobalEEPROM()->getDeviceSize() - ErrorHandlerStartAddress) != 0)
+			case ErrorHandler::eFunctionCode::TFormat:
+				if (GetI2CGlobalEEPROM()->setBlock(ERROR_HANDLER_START_ADDRESS, 0, GetI2CGlobalEEPROM()->getDeviceSize() - ERROR_HANDLER_START_ADDRESS) != 0)
 				{
 					// EEPROM error => set status back
 					mModuleIsInitialized = false;
 					return _mText->FormatFailed();
 				}
 				lErrorEepromHeader.ErrorHeader.NumberOfErrors = 0;
-				lErrorEepromHeader.ErrorHeader.NextErrorWritePointer = sizeof(sErrorEEPROMHeader) + ErrorHandlerStartAddress;
-				if (!_I2EWriteEEPROMHeader(lErrorEepromHeader))
+				lErrorEepromHeader.ErrorHeader.NextErrorWritePointer = sizeof(sErrorEEPROMHeader) + ERROR_HANDLER_START_ADDRESS;
+				if (!I2EWriteEEPROMHeader(lErrorEepromHeader))
 				{
 					return _mText->FormatFailed();
 				}
-				ErrorPrint(Error::eSeverity::TMessage, _mText->FormatDone());
+				Print(Error::eSeverity::TMessage, _mText->FormatDone());
 				return _mText->FormatDone();
 				break;
 			}
@@ -341,16 +345,18 @@ String ErrorHandler::DispatchSerial(char iModuleIdentifyer, char iParameter)
 #endif
 
 #ifdef EXTERNAL_EEPROM
-bool ErrorHandler::_I2ECheckEEPROMHeader()
+bool ErrorHandler::I2ECheckEEPROMHeader()
 {
+	DEBUG_METHOD_CALL("ErrorHandler::_I2ECheckEEPROMHeader");
+
 	union uErrorEEPROMHeader lBuffer;
 
 	if (GetI2CGlobalEEPROM() != nullptr)
 	{
 		// Read EEPROM meta data
-		GetI2CGlobalEEPROM()->readBlock(ErrorHandlerStartAddress, lBuffer.Buffer, sizeof(sErrorEEPROMHeader));
+		GetI2CGlobalEEPROM()->readBlock(ERROR_HANDLER_START_ADDRESS, lBuffer.Buffer, sizeof(sErrorEEPROMHeader));
 		// check checksum
-		return (lBuffer.ErrorHeader.Checksum == _GetEEPROMHeaderChecksum(lBuffer));
+		return (lBuffer.ErrorHeader.Checksum == GetEEPROMHeaderChecksum(lBuffer));
 	}
 	else
 	{
@@ -359,15 +365,17 @@ bool ErrorHandler::_I2ECheckEEPROMHeader()
 	}
 }
 
-bool ErrorHandler::_I2EWriteEEPROMHeader(union uErrorEEPROMHeader iBuffer)
+bool ErrorHandler::I2EWriteEEPROMHeader(union uErrorEEPROMHeader iBuffer)
 {
+	DEBUG_METHOD_CALL("ErrorHandler::_I2EWriteEEPROMHeader");
+
 	if (GetI2CGlobalEEPROM() != nullptr)
 	{
 		// calculate next checksum
-		iBuffer.ErrorHeader.Checksum = _GetEEPROMHeaderChecksum(iBuffer);
+		iBuffer.ErrorHeader.Checksum = GetEEPROMHeaderChecksum(iBuffer);
 		//	DEBUG_PRINT("Write Checksum: " + String(iBuffer.ErrorEntry.Checksum) + ", LastCount: " + String(iBuffer.ErrorEntry.LastCount) + ", StartAddress: " + String(iBuffer.ErrorEntry.StartAddress));
 
-		if (GetI2CGlobalEEPROM()->writeBlock(ErrorHandlerStartAddress, iBuffer.Buffer, sizeof(sErrorEEPROMHeader)) != 0)
+		if (GetI2CGlobalEEPROM()->writeBlock(ERROR_HANDLER_START_ADDRESS, iBuffer.Buffer, sizeof(sErrorEEPROMHeader)) != 0)
 		{
 			// EEPROM error => set status back
 			mModuleIsInitialized = false;
@@ -383,8 +391,10 @@ bool ErrorHandler::_I2EWriteEEPROMHeader(union uErrorEEPROMHeader iBuffer)
 	}
 }
 
-char ErrorHandler::_GetEEPROMHeaderChecksum(union uErrorEEPROMHeader iBuffer)
+char ErrorHandler::GetEEPROMHeaderChecksum(union uErrorEEPROMHeader iBuffer)
 {
+	DEBUG_METHOD_CALL("ErrorHandler::_GetEEPROMHeaderChecksum");
+
 	char lChecksum = 0;
 
 	for (int lIterator = 1; lIterator < (int)sizeof(sErrorEEPROMHeader); lIterator++)
@@ -398,15 +408,19 @@ char ErrorHandler::_GetEEPROMHeaderChecksum(union uErrorEEPROMHeader iBuffer)
 
 String ErrorHandler::GetName()
 {
+	DEBUG_METHOD_CALL("ErrorHandler::GetName");
+
 	return _mText->GetObjectName();
 }
 
 void ErrorHandler::Print(Error::eSeverity iSeverity, String iErrorMessage)
 {
+	DEBUG_METHOD_CALL("ErrorHandler::Print");
+
 	// write transient - no log messages
 	if (iSeverity != Error::eSeverity::TMessage)
 	{
-		_mErrorDetected = false;
+		mErrorDetected = false;
 	}
 
 #ifdef EXTERNAL_EEPROM
@@ -416,7 +430,7 @@ void ErrorHandler::Print(Error::eSeverity iSeverity, String iErrorMessage)
 	if (GetI2CGlobalEEPROM() != nullptr)
 	{
 		// Read EEPROM meta data
-		GetI2CGlobalEEPROM()->readBlock(ErrorHandlerStartAddress, lErrorEEPROMHeader.Buffer, sizeof(sErrorEEPROMHeader));
+		GetI2CGlobalEEPROM()->readBlock(ERROR_HANDLER_START_ADDRESS, lErrorEEPROMHeader.Buffer, sizeof(sErrorEEPROMHeader));
 	}
 	else
 	{
@@ -429,7 +443,7 @@ void ErrorHandler::Print(Error::eSeverity iSeverity, String iErrorMessage)
 	if (GetI2CGlobalEEPROM() != nullptr)
 	{
 		// check if memory is large enough for data
-		if ((lErrorEEPROMHeader.ErrorHeader.NextErrorWritePointer + lMessageLength) > GetI2CGlobalEEPROM()->getDeviceSize() - ErrorHandlerStartAddress)
+		if ((lErrorEEPROMHeader.ErrorHeader.NextErrorWritePointer + lMessageLength) > GetI2CGlobalEEPROM()->getDeviceSize() - ERROR_HANDLER_START_ADDRESS)
 		{
 			DEBUG_PRINT_LN("EEPROM is full");
 			return;
@@ -467,7 +481,7 @@ void ErrorHandler::Print(Error::eSeverity iSeverity, String iErrorMessage)
 		// get next count of error entries
 		lErrorEEPROMHeader.ErrorHeader.NumberOfErrors += 1;
 
-		if (!_I2EWriteEEPROMHeader(lErrorEEPROMHeader))
+		if (!I2EWriteEEPROMHeader(lErrorEEPROMHeader))
 		{
 			return;
 		};
@@ -477,5 +491,7 @@ void ErrorHandler::Print(Error::eSeverity iSeverity, String iErrorMessage)
 
 bool ErrorHandler::ContainsErrors()
 {
-	return _mErrorDetected;
+	DEBUG_METHOD_CALL("ErrorHandler::ContainsErrors");
+
+	return mErrorDetected;
 }

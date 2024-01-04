@@ -37,16 +37,27 @@ class I2CBase : public ProjectBase
 public:
 	struct sInitializeModule
 	{
-		int SettingsAddress;   // EEPROM address of the setting
-		int NumberOfSettings;  // number of setting entries in EEPROM
-		short I2CAddress;	   // I2C address of connected device
+		int SettingsAddress;  // EEPROM address of the setting
+		int NumberOfSettings; // number of setting entries in EEPROM
+		short I2CAddress;	  // I2C address of connected device
 	};
 
-private:
 	/// <summary>
-	/// Pointer to current text objekt of the class
+	/// Is called periodically from main loop
 	/// </summary>
-	TextI2CBase *_mText = nullptr;
+	virtual void loop() = 0;
+
+	/// <summary>
+	/// Readable name of the module
+	/// </summary>
+	/// <returns>Gets the current name depending on current language</returns>
+	virtual String GetName() = 0;
+
+	/// <summary>
+	/// Get the status of the current module as text
+	/// </summary>
+	/// <returns>Readable Status</returns>
+	String GetStatus();
 
 protected:
 	/// <summary>
@@ -67,31 +78,18 @@ protected:
 	I2CBase(sInitializeModule iInitializeModule);
 	~I2CBase();
 
-public:
-	/// <summary>
-	/// Is called periodically from main loop
-	/// </summary>
-	virtual void loop() = 0;
-
-	/// <summary>
-	/// Readable name of the module
-	/// </summary>
-	/// <returns>Gets the current name depending on current language</returns>
-	virtual String GetName() = 0;
-
-	/// <summary>
-	/// Get the status of the current module as text
-	/// </summary>
-	/// <returns>Readable Status</returns>
-	String GetStatus();
-
-protected:
 	/// <summary>
 	/// Maps boolean to voltage level
 	/// </summary>
 	/// <param name="ivalue">true or false</param>
 	/// <returns>HIGH or LOW</returns>
 	static uint8_t Bool2State(bool ivalue);
+
+private:
+	/// <summary>
+	/// Pointer to current text objekt of the class
+	/// </summary>
+	TextI2CBase *mText = nullptr;
 };
 
 #endif

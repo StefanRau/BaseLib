@@ -53,7 +53,7 @@ I2CBase::I2CBase(sInitializeModule iInitializeModule) : ProjectBase(iInitializeM
 {
     DEBUG_INSTANTIATION("I2CBase: iInitializeModule[SettingsAddress, NumberOfSettings, I2CAddress]=[" + String(iInitializeModule.SettingsAddress) + ", " + String(iInitializeModule.NumberOfSettings) + ", " + String(iInitializeModule.I2CAddress) + "]");
 
-    _mText = new TextI2CBase();
+    mText = new TextI2CBase();
 
     if (iInitializeModule.I2CAddress >= 0)
     {
@@ -70,7 +70,7 @@ String I2CBase::GetStatus()
 {
     // Concatenates name of the module with text, if initialized or not
     String lReturn = GetName();
-    lReturn += (mModuleIsInitialized) ? _mText->ModuleInitialized() + "\n" : _mText->ModuleNotInitialized() + "\n";
+    lReturn += (mModuleIsInitialized) ? mText->ModuleInitialized() + "\n" : mText->ModuleNotInitialized() + "\n";
     return lReturn;
 }
 

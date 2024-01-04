@@ -69,13 +69,6 @@
 /// </summary>
 class Debug
 {
-private:
-    Debug(int iCountdown);
-    ~Debug();
-
-    String _mWriteBuffer = "";
-    bool _mBufferContainsData = false;
-
 public:
     /// <summary>
     /// Gets a singleton
@@ -135,6 +128,13 @@ public:
     /// Is called periodically from main loop
     /// </summary>
     void loop();
+
+private:
+    Debug(int iCountdown);
+    ~Debug();
+
+    String mWriteBuffer = "";
+    bool mBufferContainsData = false;
 };
 
 #endif

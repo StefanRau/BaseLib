@@ -25,20 +25,17 @@ public:
 /// </summary>
 class ListCollection
 {
-private:
-	ListCollection();
-
 public:
-	/// <summary>
-	/// Destroyes all content and the .
-	/// </summary>
-	~ListCollection();
-
 	/// <summary>
 	/// Gets a new instance of this class.
 	/// </summary>
 	/// <returns>Instance of this class</returns>
 	static ListCollection *GetInstance();
+
+	/// <summary>
+	/// Destroyes all content.
+	/// </summary>
+	~ListCollection();
 
 	/// <summary>
 	/// Adds an object to the list
@@ -105,6 +102,11 @@ public:
 	void *Iterate(ListElement **iCurrentElement);
 
 private:
+	/// <summary>
+	/// Constructor
+	/// </summary>
+	ListCollection();
+
 	ListElement *_mFirst = nullptr; // pointer to 1st element of the list
 	ListElement *_mLast = nullptr;	// pointer to last element of the list
 	// ListElement *_mIterator = nullptr; // iterator for iterating through a list

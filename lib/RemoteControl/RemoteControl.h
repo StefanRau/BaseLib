@@ -16,17 +16,6 @@
 
 class RemoteControl
 {
-private:
-	char *_mBuffer;			 // Receiver buffer - given by caller
-	int _mBufflen;			 // Length of the buffer
-	int _mWritePosition;	 // Position of write pointer
-	bool _mEndDetected;		 // true, if the end of a string is detected
-	bool _mOverflowDetected; // true, if more bytes are received, than fit into buffer
-
-	RemoteControl(char *iBuffer, uint8_t iBufflen);
-	~RemoteControl();
-
-	void WriteChar(char iChar);
 
 public:
 	/// <summary>
@@ -74,6 +63,18 @@ public:
 	/// Outputs a ">" to serial interface
 	/// </summary>
 	void WaitForInput();
+
+private:
+	char *mBuffer;			// Receiver buffer - given by caller
+	int mBufflen;			// Length of the buffer
+	int mWritePosition;		// Position of write pointer
+	bool mEndDetected;		// true, if the end of a string is detected
+	bool mOverflowDetected; // true, if more bytes are received, than fit into buffer
+
+	RemoteControl(char *iBuffer, uint8_t iBufflen);
+	~RemoteControl();
+
+	void WriteChar(char iChar);
 };
 
 #endif

@@ -30,7 +30,7 @@ class ProjectBase
 public:
 #if DEBUG_APPLICATION == 0
 	// Global commands for remote control
-	enum eFunctionCode : char
+	enum class eFunctionCode : char
 	{
 		TParameterGetCurrent = '?', // Get current state or current function
 		TParameterGetAll = '*',		// Get a list or all possibilities
@@ -40,27 +40,6 @@ public:
 
 	const unsigned char cNullSetting = 255; // There is either no setting in EEPROM or no EEPROM defined
 
-#ifndef NO_EEPROM
-private:
-	int _mSettingAdddress = -1; // EEPROM Address of the settings of this module. Per default, the setting is inactive.
-	int _mNumberOfSettings = 0; // Number of reserved settings in the EEPROM.
-#endif
-
-protected:
-	/// <summary>
-	/// Constructor
-	/// </summary>
-	/// <param name="iSettingsAddress">1st Address of the EEPROM for storing the current value, if -1, then this value is ignored</param>
-	/// <param name="iNumberOfSettings">Number of settings, relevant for this instance. If iSettingsAddress = -1 => this parameter is ignored and set to 0.</param>
-	ProjectBase(int iSettingsAddress, int iNumberOfSettings);
-
-	/// <summary>
-	/// Constructor without setting
-	/// </summary>
-	ProjectBase();
-	~ProjectBase();
-
-public:
 #ifdef EXTERNAL_EEPROM
 	/// <summary>
 	/// Sets the I2C address of the large EEPROM
@@ -99,6 +78,19 @@ public:
 
 protected:
 	/// <summary>
+	/// Constructor
+	/// </summary>
+	/// <param name="iSettingsAddress">1st Address of the EEPROM for storing the current value, if -1, then this value is ignored</param>
+	/// <param name="iNumberOfSettings">Number of settings, relevant for this instance. If iSettingsAddress = -1 => this parameter is ignored and set to 0.</param>
+	ProjectBase(int iSettingsAddress, int iNumberOfSettings);
+
+	/// <summary>
+	/// Constructor without setting
+	/// </summary>
+	ProjectBase();
+	~ProjectBase();
+
+	/// <summary>
 	/// Saves a setting parameter in the internal EEPROM, if the settings address is larger or equal than 0
 	/// </summary>
 	/// <param name="iNumberOfSetting">The number of the current setting.</param>
@@ -111,6 +103,12 @@ protected:
 	/// <param name="iNumberOfSetting">The number of the current setting.</param>
 	/// <returns>Value from EEPROM. Returns blank for settings address is smaller than 0.</returns>
 	char GetSetting(int iNumberOfSetting);
+
+private:
+#ifndef NO_EEPROM
+	int mSettingAdddress = -1; // EEPROM Address of the settings of this module. Per default, the setting is inactive.
+	int mNumberOfSettings = 0; // Number of reserved settings in the EEPROM.
+#endif
 };
 
 #endif

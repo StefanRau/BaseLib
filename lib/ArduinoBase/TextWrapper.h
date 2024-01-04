@@ -31,22 +31,6 @@ public:
 /// </summary>
 class TextWrapper : public ProjectBase
 {
-private:
-	const int _cEepromIndexLanguage = 1; // Entry used for language
-
-	/// <summary>
-	/// Pointer to current text objekt of the class
-	/// </summary>
-	TextTextWrapper *_mText = nullptr;
-
-#if DEBUG_APPLICATION == 0
-	// Remote commands
-	enum eFunctionCode : char
-	{
-		TName = 'L' // Code, if controlled remotely
-	};
-#endif
-
 public:
 	/// <summary>
 	/// Constructor
@@ -69,6 +53,22 @@ public:
 	/// </param>
 	/// <returns>Reaction of dispatching</returns>
 	String DispatchSerial(char iModuleIdentifyer, char iParameter) override;
+#endif
+
+private:
+	const int _cEepromIndexLanguage = 1; // Entry used for language
+
+	/// <summary>
+	/// Pointer to current text objekt of the class
+	/// </summary>
+	TextTextWrapper *_mText = nullptr;
+
+#if DEBUG_APPLICATION == 0
+	// Remote commands
+	enum eFunctionCode : char
+	{
+		TName = 'L' // Code, if controlled remotely
+	};
 #endif
 };
 
