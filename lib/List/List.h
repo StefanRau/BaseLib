@@ -15,9 +15,9 @@
 class ListElement
 {
 public:
-	ListElement *_mPrevious = nullptr; // pointer to predecissor - the 1st element has nullptr
-	ListElement *_mNext = nullptr;	   // pointer to successor - the last element has nullptr
-	void *_mObject = nullptr;		   // pointer to the contained object
+	ListElement *mPrevious = nullptr; // pointer to predecissor - the 1st element has nullptr
+	ListElement *mNext = nullptr;	  // pointer to successor - the last element has nullptr
+	void *mObject = nullptr;		  // pointer to the contained object
 };
 
 /// <summary>
@@ -108,7 +108,7 @@ private:
 	ListCollection();
 
 	ListElement *mFirst = nullptr; // pointer to 1st element of the list
-	ListElement *mLast = nullptr;	// pointer to last element of the list
+	ListElement *mLast = nullptr;  // pointer to last element of the list
 
 	/// <summary>
 	/// Gets the ListElement at the index

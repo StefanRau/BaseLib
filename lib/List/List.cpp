@@ -29,8 +29,8 @@ ListCollection::~ListCollection()
 	// Delete each single element and the stored instances
 	while (lCurrentObject != nullptr)
 	{
-		lNextObject = lCurrentObject->_mNext;
-		delete lCurrentObject->_mObject;
+		lNextObject = lCurrentObject->mNext;
+		delete lCurrentObject->mObject;
 		delete lCurrentObject;
 		lCurrentObject = lNextObject;
 	}
@@ -54,7 +54,7 @@ bool ListCollection::Add(void *iObject)
 		return false;
 	}
 
-	lNewElement->_mObject = iObject;
+	lNewElement->mObject = iObject;
 
 	if (mFirst == nullptr)
 	{
@@ -64,8 +64,8 @@ bool ListCollection::Add(void *iObject)
 	else
 	{
 		// insert new element at the end of the list
-		mLast->_mNext = lNewElement;
-		lNewElement->_mPrevious = mLast;
+		mLast->mNext = lNewElement;
+		lNewElement->mPrevious = mLast;
 		mLast = lNewElement;
 	}
 
@@ -88,54 +88,54 @@ bool ListCollection::Delete(int iIndex)
 	}
 
 	// Process one and only element
-	if ((lIterator->_mPrevious == nullptr) && (lIterator->_mNext == nullptr))
+	if ((lIterator->mPrevious == nullptr) && (lIterator->mNext == nullptr))
 	{
 		mFirst = nullptr;
 		mLast = nullptr;
 	}
 
 	// Adapt the element before
-	if (lIterator->_mPrevious != nullptr)
+	if (lIterator->mPrevious != nullptr)
 	{
 		// If a predecessor exists
 
-		if (lIterator->_mNext == nullptr)
+		if (lIterator->mNext == nullptr)
 		{
 			// the current element is the last one => make entry before the last one
-			lIterator->_mPrevious->_mNext = nullptr;
+			lIterator->mPrevious->mNext = nullptr;
 			// Take the previous element as last one
-			mLast = lIterator->_mPrevious;
+			mLast = lIterator->mPrevious;
 		}
 		else
 		{
 			// If a successor exists => entry before points to the successor of the current entry
-			lIterator->_mPrevious->_mNext = lIterator->_mNext;
+			lIterator->mPrevious->mNext = lIterator->mNext;
 		}
 	}
 
 	// Adapt the element after
-	if (lIterator->_mNext != nullptr)
+	if (lIterator->mNext != nullptr)
 	{
 		// If a successor exists
 
-		if (lIterator->_mPrevious == nullptr)
+		if (lIterator->mPrevious == nullptr)
 		{
 			// the current element is the 1st one => make entry after the 1st one
-			lIterator->_mNext->_mPrevious = nullptr;
+			lIterator->mNext->mPrevious = nullptr;
 			// Take the next element as 1st one
-			mFirst = lIterator->_mNext;
+			mFirst = lIterator->mNext;
 		}
 		else
 		{
 			// If a predecessor exists => entry after points to the predecessor of the current entry
-			lIterator->_mNext->_mPrevious = lIterator->_mPrevious;
+			lIterator->mNext->mPrevious = lIterator->mPrevious;
 		}
 	}
 
 	// Rempove current element from memory
-	if (lIterator->_mObject != nullptr)
+	if (lIterator->mObject != nullptr)
 	{
-		delete lIterator->_mObject;
+		delete lIterator->mObject;
 	}
 
 	delete lIterator;
@@ -146,13 +146,13 @@ bool ListCollection::Delete(int iIndex)
 void *ListCollection::GetFirst()
 {
 	DEBUG_METHOD_CALL("ListCollection::GetFirst");
-	return mFirst->_mObject;
+	return mFirst->mObject;
 }
 
 void *ListCollection::GetLast()
 {
 	DEBUG_METHOD_CALL("ListCollection::GetLast");
-	return mLast->_mObject;
+	return mLast->mObject;
 }
 
 void *ListCollection::Get(int iIndex)
@@ -160,7 +160,7 @@ void *ListCollection::Get(int iIndex)
 	DEBUG_METHOD_CALL("ListCollection::Get");
 
 	ListElement *lIterator = GetInternal(iIndex);
-	return (lIterator == nullptr) ? nullptr : lIterator->_mObject;
+	return (lIterator == nullptr) ? nullptr : lIterator->mObject;
 }
 
 ListElement *ListCollection::GetInternal(int iIndex)
@@ -169,7 +169,7 @@ ListElement *ListCollection::GetInternal(int iIndex)
 
 	int lIterator = 0;
 
-	for (ListElement *lCurrentElement = mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->_mNext, lIterator++)
+	for (ListElement *lCurrentElement = mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->mNext, lIterator++)
 	{
 		if (iIndex == lIterator)
 		{
@@ -187,7 +187,7 @@ void *ListCollection::Filter(bool (*iCallback)(void *))
 	DEBUG_METHOD_CALL("ListCollection::Filter");
 
 	ListElement *lIterator = GetInternal(iCallback);
-	return (lIterator == nullptr) ? nullptr : lIterator->_mObject;
+	return (lIterator == nullptr) ? nullptr : lIterator->mObject;
 }
 
 ListElement *ListCollection::GetInternal(bool (*iCallback)(void *))
@@ -196,10 +196,10 @@ ListElement *ListCollection::GetInternal(bool (*iCallback)(void *))
 
 	int lIterator = 0;
 
-	for (ListElement *lCurrentElement = mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->_mNext, lIterator++)
+	for (ListElement *lCurrentElement = mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->mNext, lIterator++)
 	{
 		// Call customer comparer
-		if (iCallback(lCurrentElement->_mObject))
+		if (iCallback(lCurrentElement->mObject))
 		{
 			// return element under this index
 			return lCurrentElement;
@@ -216,7 +216,7 @@ int ListCollection::Count()
 
 	int lIterator = 0;
 
-	for (ListElement *lCurrentElement = mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->_mNext, lIterator++)
+	for (ListElement *lCurrentElement = mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->mNext, lIterator++)
 		;
 
 	return lIterator;
@@ -237,8 +237,8 @@ void *ListCollection::Iterate(ListElement **iCurrentElement)
 
 	if (*iCurrentElement != nullptr)
 	{
-		lCurrentObject = (*iCurrentElement)->_mObject;
-		(*iCurrentElement) = (*iCurrentElement)->_mNext;
+		lCurrentObject = (*iCurrentElement)->mObject;
+		(*iCurrentElement) = (*iCurrentElement)->mNext;
 		return lCurrentObject;
 	}
 	return nullptr;
