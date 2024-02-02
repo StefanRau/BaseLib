@@ -68,6 +68,7 @@ I2CBase::~I2CBase()
 
 String I2CBase::GetStatus()
 {
+    DEBUG_METHOD_CALL("I2CBase::GetStatus");
     // Concatenates name of the module with text, if initialized or not
     String lReturn = GetName();
     lReturn += (mModuleIsInitialized) ? mText->ModuleInitialized() + "\n" : mText->ModuleNotInitialized() + "\n";
@@ -76,5 +77,6 @@ String I2CBase::GetStatus()
 
 uint8_t I2CBase::Bool2State(bool iValue)
 {
+    DEBUG_METHOD_CALL("I2CBase::Bool2State");
     return (iValue) ? HIGH : LOW;
 }

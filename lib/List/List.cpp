@@ -9,7 +9,7 @@
 // 27.03.2023: Add filter support - Stefan Rau
 // 02.06.2023: Add additional debug support and fix bug in destruction - Stefan Rau
 // 10.06.2023: Add and delete return false when failing - Stefan Rau
-// 09.07.2023: Parralel iterations are now possible as well
+// 09.07.2023: Parallel iterations are now possible as well
 
 #include "List.h"
 

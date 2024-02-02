@@ -10,30 +10,29 @@ static Application *gInstance = nullptr;
 
 Application::Application()
 {
-  DebugInstantiation("Application");
-
+  DEBUG_INSTANTIATION("Application");
 }
 
 Application::~Application()
 {
-  DebugDestroy("Application");
+  DEBUG_DESTROY("Application");
 }
 
 Application *Application::GetInstance()
 {
-  DebugMethodCalls("Application::GetInstance");
+  DEBUG_METHOD_CALL("Application::GetInstance");
   gInstance = (gInstance == nullptr) ? new Application() : gInstance;
   return gInstance;
 }
 
 void Application::setup()
 {
-  DebugMethodCalls("Application::setup");
+  DEBUG_METHOD_CALL("Application::setup");
 
 }
 
 void Application::loop()
 {
-  DebugMethodCalls("Application::loop");
+  DEBUG_METHOD_CALL("Application::loop");
 
 }

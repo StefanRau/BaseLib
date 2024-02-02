@@ -10,17 +10,17 @@ static Module *gInstance = nullptr;
 
 Module::Module()
 {
-  DebugInstantiation("Module");
+  DEBUG_INSTANTIATION("Module");
 }
 
 Module::~Module()
 {
-  DebugDestroy("Module");
+  DEBUG_DESTROY("Module");
 }
 
 Module *Module::GetInstance()
 {
-  DebugMethodCalls("Module::GetInstance");
+  DEBUG_METHOD_CALL("Module::GetInstance");
   gInstance = (gInstance == nullptr) ? new Module() : gInstance;
   return gInstance;
 }

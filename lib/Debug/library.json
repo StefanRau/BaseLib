@@ -1,0 +1,17 @@
+{
+  "name": "BaseLibDebug",
+  "version": "1.0.0",
+  "keywords": "BaseLibDebug",
+  "description": "",
+  "authors": {
+    "name": "Stefan Rau",
+    "email": "stefan.rau@makeittrue.de",
+    "maintainer": true
+  },
+  "license": "MIT",
+  "frameworks": "*",
+  "platforms": "*",
+  "build": {
+    "srcDir": "."
+  }
+}

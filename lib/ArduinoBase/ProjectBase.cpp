@@ -102,11 +102,15 @@ ProjectBase::~ProjectBase()
 #ifdef EXTERNAL_EEPROM
 void ProjectBase::SetI2CAddressGlobalEEPROM(short iI2CAddress)
 {
+    DEBUG_METHOD_CALL("ProjectBase::SetI2CAddressGlobalEEPROM");
+
     gI2CAddressGlobalEEPROM = iI2CAddress;
 }
 
 I2C_eeprom *ProjectBase::GetI2CGlobalEEPROM()
 {
+    DEBUG_METHOD_CALL("ProjectBase::GetI2CGlobalEEPROM");
+
     return gI2CGlobalEEPROM;
 }
 #endif
@@ -114,17 +118,23 @@ I2C_eeprom *ProjectBase::GetI2CGlobalEEPROM()
 #if DEBUG_APPLICATION == 0
 void ProjectBase::SetVerboseMode(bool iVerboseMode)
 {
+    DEBUG_METHOD_CALL("ProjectBase::SetVerboseMode");
+
     gVerboseMode = iVerboseMode;
 }
 
 bool ProjectBase::GetVerboseMode()
 {
+    DEBUG_METHOD_CALL("ProjectBase::GetVerboseMode");
+
     return gVerboseMode;
 }
 #endif
 
 void ProjectBase::SetSetting(int iSettingNumber, char iValue)
 {
+    DEBUG_METHOD_CALL("ProjectBase::SetSetting");
+
 #ifndef NO_EEPROM
     // Settings address and value must be valid
     if ((mSettingAdddress >= 0) && (iSettingNumber > 0) && (iSettingNumber <= mNumberOfSettings) && (iValue != cNullSetting))
@@ -146,6 +156,8 @@ void ProjectBase::SetSetting(int iSettingNumber, char iValue)
 
 char ProjectBase::GetSetting(int iSettingNumber)
 {
+    DEBUG_METHOD_CALL("ProjectBase::GetSetting");
+
     char lSetting = cNullSetting;
 
 #ifndef NO_EEPROM
