@@ -11,7 +11,7 @@
 #define DEBUG_SPEED 9600
 #endif
 
-#if DEBUG_APPLICATION == 0
+#if DEBUG_APPLICATION <= 0
 #define DEBUG_START(Text)
 #define DEBUG_PRINT(Text)
 #define DEBUG_PRINT_LN(Text)

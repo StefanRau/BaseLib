@@ -7,6 +7,7 @@
 #ifndef _List_h
 #define _List_h
 
+#include <Arduino.h>
 #include "Debug.h"
 
 /// <summary>
@@ -49,7 +50,7 @@ public:
 	/// </summary>
 	/// <param name="iIndex">Index of the object to delete</param>
 	/// <returns>True if element is sucessfully deleted</returns>
-	bool Delete(int iIndex);
+	bool Delete(uint16_t iIndex);
 
 	/// <summary>
 	/// Gets the 1st object of the list
@@ -68,7 +69,7 @@ public:
 	/// </summary>
 	/// <param name="iIndex">Index of the object to get</param>
 	/// <returns>Object to get</returns>
-	void *Get(int iIndex);
+	void *Get(uint16_t iIndex);
 
 	/// <summary>
 	/// Gets the object using a customer filter implementation
@@ -88,7 +89,7 @@ public:
 	/// Calculates the size of the object list
 	/// </summary>
 	/// <returns>Size of list</returns>
-	int Count();
+	uint16_t Count();
 
 	/// <summary>
 	/// Starts a new iteration
@@ -116,7 +117,7 @@ private:
 	/// <param name="iIndex">Index of the object to get</param>
 	/// <param name="iCallback">Method that calculates filter criteria</param>
 	/// <returns>ListElement to get</returns>
-	ListElement *GetInternal(int iIndex);
+	ListElement *GetInternal(uint16_t iIndex);
 	ListElement *GetInternal(bool (*iCallback)(void *));
 };
 

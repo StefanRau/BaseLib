@@ -24,7 +24,6 @@ Debug::Debug(int iCountdown)
 {
 	int lCount = iCountdown + 1;
 
-	// noInterrupts();
 	Serial.begin(DEBUG_SPEED);
 
 	while (!Serial)
@@ -52,7 +51,6 @@ Debug::Debug(int iCountdown)
 
 	// Wait until buffer is empty
 	Serial.flush();
-	// interrupts();
 }
 
 Debug::~Debug()
@@ -68,56 +66,44 @@ Debug *Debug::GetInstance(int iCountdown)
 
 void Debug::Print(String iOutput)
 {
-	// noInterrupts();
 	Serial.print(iOutput);
 	// Wait until buffer is empty
 	Serial.flush();
-	// interrupts();
 }
 
 void Debug::Print(const Printable &iOutput)
 {
-	// noInterrupts();
 	Serial.print(iOutput);
 	// Wait until buffer is empty
 	Serial.flush();
-	// interrupts();
 }
 
 void Debug::Print(char iOutput)
 {
-	// noInterrupts();
 	Serial.print(iOutput);
 	// Wait until buffer is empty
 	Serial.flush();
-	// interrupts();
 }
 
 void Debug::PrintLn(String iOutput)
 {
-	// noInterrupts();
 	Serial.println(iOutput);
 	// Wait until buffer is empty
 	Serial.flush();
-	// interrupts();
 }
 
 void Debug::PrintLn(const Printable &iOutput)
 {
-	// noInterrupts();
 	Serial.println(iOutput);
 	// Wait until buffer is empty
 	Serial.flush();
-	// interrupts();
 }
 
 void Debug::PrintLn(char iOutput)
 {
-	// noInterrupts();
 	Serial.print(iOutput);
 	// Wait until buffer is empty
 	Serial.flush();
-	// interrupts();
 }
 
 void Debug::BinaryDump(void *iData, size_t iLength)

@@ -9,7 +9,7 @@
 // 27.03.2023: Add filter support - Stefan Rau
 // 02.06.2023: Add additional debug support and fix bug in destruction - Stefan Rau
 // 10.06.2023: Add and delete return false when failing - Stefan Rau
-// 09.07.2023: Parallel iterations are now possible as well
+// 09.07.2023: Parallel iterations are now possible as well - Stefan Rau
 
 #include "List.h"
 
@@ -73,7 +73,7 @@ bool ListCollection::Add(void *iObject)
 	return true;
 }
 
-bool ListCollection::Delete(int iIndex)
+bool ListCollection::Delete(uint16_t iIndex)
 {
 	DEBUG_METHOD_CALL("ListCollection::Delete");
 
@@ -155,7 +155,7 @@ void *ListCollection::GetLast()
 	return mLast->mObject;
 }
 
-void *ListCollection::Get(int iIndex)
+void *ListCollection::Get(uint16_t iIndex)
 {
 	DEBUG_METHOD_CALL("ListCollection::Get");
 
@@ -163,11 +163,11 @@ void *ListCollection::Get(int iIndex)
 	return (lIterator == nullptr) ? nullptr : lIterator->mObject;
 }
 
-ListElement *ListCollection::GetInternal(int iIndex)
+ListElement *ListCollection::GetInternal(uint16_t iIndex)
 {
 	DEBUG_METHOD_CALL("ListCollection::GetInternal");
 
-	int lIterator = 0;
+	uint16_t lIterator = 0;
 
 	for (ListElement *lCurrentElement = mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->mNext, lIterator++)
 	{
@@ -210,11 +210,11 @@ ListElement *ListCollection::GetInternal(bool (*iCallback)(void *))
 	return nullptr;
 }
 
-int ListCollection::Count()
+uint16_t ListCollection::Count()
 {
 	DEBUG_METHOD_CALL("ListCollection::Count");
 
-	int lIterator = 0;
+	uint16_t lIterator = 0;
 
 	for (ListElement *lCurrentElement = mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->mNext, lIterator++)
 		;
