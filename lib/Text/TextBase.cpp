@@ -10,8 +10,9 @@
 // 07.11.2023: Class is now independent of EEPROM settings, that is moved to class TextWrapper if required - Stefan Rau
 
 #include "TextBase.h"
+#include "Debug.h"
 
-static char gTextBaseLanguage = TEXT_DEFAULT_LANGUAGE; // Stores the language that is used for all text objects
+static char gTextBaseLanguage = TEXTBASE_DEFAULT_LANGUAGE; // Stores the language that is used for all text objects
 
 TextBase::TextBase()
 {
@@ -31,13 +32,13 @@ String TextBase::GetValidLanguages(bool iVerbose)
 	}
 	else
 	{
-		return TEXT_VALID_LANGUAGES;
+		return TEXTBASE_VALID_LANGUAGES;
 	}
 }
 
 void TextBase::SetLanguage(char iLanguage)
 {
-	if (String(TEXT_VALID_LANGUAGES).indexOf(iLanguage) >= 0)
+	if (String(TEXTBASE_VALID_LANGUAGES).indexOf(iLanguage) >= 0)
 	{
 		gTextBaseLanguage = iLanguage;
 	}
@@ -52,9 +53,9 @@ String TextBase::GetSelectedLanguageName()
 {
 	switch (gTextBaseLanguage)
 	{
-	case TEXT_LANGUAGE_D:
+	case TEXTBASE_LANGUAGE_D:
 		return LanguageGerman();
-	case TEXT_LANGUAGE_E:
+	case TEXTBASE_LANGUAGE_E:
 		return LanguageEnglish();
 	}
 
@@ -65,8 +66,8 @@ String TextBase::LanguageEnglish()
 {
 	switch (GetLanguage())
 	{
-		TextLangE("English");
-		TextLangD("Englisch");
+		TEXTBASE_LANG_E("English");
+		TEXTBASE_LANG_D("Englisch");
 	}
 }
 
@@ -74,7 +75,7 @@ String TextBase::LanguageGerman()
 {
 	switch (GetLanguage())
 	{
-		TextLangE("German");
-		TextLangD("Deutsch");
+		TEXTBASE_LANG_E("German");
+		TEXTBASE_LANG_D("Deutsch");
 	}
 }

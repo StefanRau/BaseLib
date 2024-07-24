@@ -12,6 +12,7 @@
 // 09.07.2023: Parallel iterations are now possible as well - Stefan Rau
 
 #include "List.h"
+#include "Debug.h"
 
 ListCollection::ListCollection()
 {
@@ -73,7 +74,7 @@ bool ListCollection::Add(void *iObject)
 	return true;
 }
 
-bool ListCollection::Delete(uint16_t iIndex)
+bool ListCollection::Delete(int iIndex)
 {
 	DEBUG_METHOD_CALL("ListCollection::Delete");
 
@@ -155,7 +156,7 @@ void *ListCollection::GetLast()
 	return mLast->mObject;
 }
 
-void *ListCollection::Get(uint16_t iIndex)
+void *ListCollection::Get(int iIndex)
 {
 	DEBUG_METHOD_CALL("ListCollection::Get");
 
@@ -163,11 +164,11 @@ void *ListCollection::Get(uint16_t iIndex)
 	return (lIterator == nullptr) ? nullptr : lIterator->mObject;
 }
 
-ListElement *ListCollection::GetInternal(uint16_t iIndex)
+ListElement *ListCollection::GetInternal(int iIndex)
 {
 	DEBUG_METHOD_CALL("ListCollection::GetInternal");
 
-	uint16_t lIterator = 0;
+	int lIterator = 0;
 
 	for (ListElement *lCurrentElement = mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->mNext, lIterator++)
 	{
@@ -182,7 +183,7 @@ ListElement *ListCollection::GetInternal(uint16_t iIndex)
 	return nullptr;
 }
 
-void *ListCollection::Filter(bool (*iCallback)(void *))
+void *ListCollection::Filter(bool (*iCallback)(void *, void *))
 {
 	DEBUG_METHOD_CALL("ListCollection::Filter");
 
@@ -190,7 +191,7 @@ void *ListCollection::Filter(bool (*iCallback)(void *))
 	return (lIterator == nullptr) ? nullptr : lIterator->mObject;
 }
 
-ListElement *ListCollection::GetInternal(bool (*iCallback)(void *))
+ListElement *ListCollection::GetInternal(bool (*iCallback)(void *, void *))
 {
 	DEBUG_METHOD_CALL("ListCollection::GetInternal");
 
@@ -199,7 +200,7 @@ ListElement *ListCollection::GetInternal(bool (*iCallback)(void *))
 	for (ListElement *lCurrentElement = mFirst; lCurrentElement != nullptr; lCurrentElement = lCurrentElement->mNext, lIterator++)
 	{
 		// Call customer comparer
-		if (iCallback(lCurrentElement->mObject))
+		if (iCallback(lCurrentElement->mObject, mHostingElement))
 		{
 			// return element under this index
 			return lCurrentElement;
@@ -208,6 +209,13 @@ ListElement *ListCollection::GetInternal(bool (*iCallback)(void *))
 
 	// Element not found, index is out of range
 	return nullptr;
+}
+
+void ListCollection::SetHostingElement(void *iHostingElement)
+{
+	DEBUG_METHOD_CALL("ListCollection::SetHostingElement");
+
+	mHostingElement = iHostingElement;
 }
 
 uint16_t ListCollection::Count()

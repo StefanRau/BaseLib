@@ -40,8 +40,8 @@ String TextErrorHandler::GetObjectName()
 {
 	switch (GetLanguage())
 	{
-		TextLangE("Error Handler");
-		TextLangD("Fehlerbehandlung");
+		TEXTBASE_LANG_E("Error Handler");
+		TEXTBASE_LANG_D("Fehlerbehandlung");
 	}
 }
 
@@ -50,8 +50,8 @@ String TextErrorHandler::FunctionNameUnknown(char iModuleIdentifyer, char iParam
 {
 	switch (GetLanguage())
 	{
-		TextLangE("Unknown function: " + String(iModuleIdentifyer) + ":" + String(iParameter));
-		TextLangD("Unbekannte Funktion: " + String(iModuleIdentifyer) + ":" + String(iParameter));
+		TEXTBASE_LANG_E("Unknown function: " + String(iModuleIdentifyer) + ":" + String(iParameter));
+		TEXTBASE_LANG_D("Unbekannte Funktion: " + String(iModuleIdentifyer) + ":" + String(iParameter));
 	}
 }
 
@@ -59,8 +59,8 @@ String TextErrorHandler::FormatDone()
 {
 	switch (GetLanguage())
 	{
-		TextLangE("EEPROM formatted");
-		TextLangD("EEPROM formatiert");
+		TEXTBASE_LANG_E("EEPROM formatted");
+		TEXTBASE_LANG_D("EEPROM formatiert");
 	}
 }
 
@@ -68,8 +68,8 @@ String TextErrorHandler::FormatFailed()
 {
 	switch (GetLanguage())
 	{
-		TextLangE("EEPROM formatting failed");
-		TextLangD("EEPROM Formatierung fehlgschlagen");
+		TEXTBASE_LANG_E("EEPROM formatting failed");
+		TEXTBASE_LANG_D("EEPROM Formatierung fehlgschlagen");
 	}
 }
 
@@ -77,8 +77,8 @@ String TextErrorHandler::ErrorListDone()
 {
 	switch (GetLanguage())
 	{
-		TextLangE("There are no more entries");
-		TextLangD("Es gibt keine weiteren Einträge");
+		TEXTBASE_LANG_E("There are no more entries");
+		TEXTBASE_LANG_D("Es gibt keine weiteren Einträge");
 	}
 }
 
@@ -86,8 +86,8 @@ String TextErrorHandler::SeverityMessage()
 {
 	switch (GetLanguage())
 	{
-		TextLangE("Message");
-		TextLangD("Meldung");
+		TEXTBASE_LANG_E("Message");
+		TEXTBASE_LANG_D("Meldung");
 	}
 }
 
@@ -95,8 +95,8 @@ String TextErrorHandler::SeverityWarning()
 {
 	switch (GetLanguage())
 	{
-		TextLangE("Warning");
-		TextLangD("Warnung");
+		TEXTBASE_LANG_E("Warning");
+		TEXTBASE_LANG_D("Warnung");
 	}
 }
 
@@ -104,8 +104,8 @@ String TextErrorHandler::SeverityError()
 {
 	switch (GetLanguage())
 	{
-		TextLangE("Error");
-		TextLangD("Fehler");
+		TEXTBASE_LANG_E("Error");
+		TEXTBASE_LANG_D("Fehler");
 	}
 }
 
@@ -113,8 +113,8 @@ String TextErrorHandler::SeverityFatal()
 {
 	switch (GetLanguage())
 	{
-		TextLangE("Fatal Error");
-		TextLangD("Schwerwiegender Fehler");
+		TEXTBASE_LANG_E("Fatal Error");
+		TEXTBASE_LANG_D("Schwerwiegender Fehler");
 	}
 }
 
@@ -122,8 +122,8 @@ String TextErrorHandler::SeverityUnknown()
 {
 	switch (GetLanguage())
 	{
-		TextLangE("Unknow");
-		TextLangD("Unbekannt");
+		TEXTBASE_LANG_E("Unknow");
+		TEXTBASE_LANG_D("Unbekannt");
 	}
 }
 #endif

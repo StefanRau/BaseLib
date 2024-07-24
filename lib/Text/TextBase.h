@@ -8,52 +8,51 @@
 #define _TextBase_h
 
 #include <Arduino.h>
-#include "Debug.h"
 
-#define TEXT_LANGUAGE_D 'D'
-#define TEXT_LANGUAGE_E 'E'
-#define TEXT_DEFAULT_LANGUAGE TEXT_LANGUAGE_E
-#define TEXT_VALID_LANGUAGES "DE"
+#define TEXTBASE_LANGUAGE_D 'D'
+#define TEXTBASE_LANGUAGE_E 'E'
+#define TEXTBASE_DEFAULT_LANGUAGE TEXTBASE_LANGUAGE_E
+#define TEXTBASE_VALID_LANGUAGES "DE"
 
-#if TEXT_DEFAULT_LANGUAGE == TEXT_LANGUAGE_D
-#define TextLangD(Text) \
+#if TEXTBASE_LANGUAGE_E == TEXTBASE_LANGUAGE_D
+#define TEXTBASE_LANG_D(Text) \
 	default:            \
 		return Text;    \
 		break;
-#define ActionLangD(Target, Text) \
+#define TEXTBASE_ACTION_LANG_D(Target, Text) \
 	default:                      \
 		Text;                     \
 		return Target;            \
 		break;
 #else
-#define TextLangD(Text)   \
-	case TEXT_LANGUAGE_D: \
+#define TEXTBASE_LANG_D(Text)   \
+	case TEXTBASE_LANGUAGE_D: \
 		return Text;      \
 		break;
-#define ActionLangD(Target, Text) \
-	case TEXT_LANGUAGE_D:         \
+#define TEXTBASE_ACTION_LANG_D(Target, Text) \
+	case TEXTBASE_LANGUAGE_D:         \
 		Text;                     \
 		return Target;            \
 		break;
 #endif
 
-#if TEXT_DEFAULT_LANGUAGE == TEXT_LANGUAGE_E
-#define TextLangE(Text) \
+#if TEXTBASE_LANGUAGE_E == TEXTBASE_LANGUAGE_E
+#define TEXTBASE_LANG_E(Text) \
 	default:            \
 		return Text;    \
 		break;
-#define ActionLangE(Target, Text) \
+#define TEXTBASE_ACTION_LANG_E(Target, Text) \
 	default:                      \
 		Text;                     \
 		return Target;            \
 		break;
 #else
-#define TextLangE(Text)   \
-	case TEXT_LANGUAGE_E: \
+#define TEXTBASE_LANG_E(Text)   \
+	case TEXTBASE_LANGUAGE_E: \
 		return Text;      \
 		break;
-#define ActionLangE(Target, Text) \
-	case TEXT_LANGUAGE_E:         \
+#define TEXTBASE_ACTION_LANG_E(Target, Text) \
+	case TEXTBASE_LANGUAGE_E:         \
 		Text;                     \
 		return Target;            \
 		break;

@@ -94,6 +94,12 @@ public:
     /// <param name="iOutput">Text to write</param>
     void Print(char iOutput);
 
+    // /// <summary>
+    // /// Writes debugging text to output
+    // /// </summary>
+    // /// <param name="iOutput">Text to write</param>
+    // void Print(bool iOutput);
+
     /// <summary>
     /// Writes debugging text to output with line break
     /// </summary>
@@ -111,6 +117,12 @@ public:
     /// </summary>
     /// <param name="iOutput">Text to write</param>
     void PrintLn(char iOutput);
+
+    // /// <summary>
+    // /// Writes debugging text to output
+    // /// </summary>
+    // /// <param name="iOutput">Text to write</param>
+    // void PrintLn(bool iOutput);
 
     /// <summary>
     /// Makes a binary dump of memory area

@@ -31,8 +31,8 @@ String TextI2CBase::ModuleInitialized()
 {
     switch (GetLanguage())
     {
-        TextLangE(" is initialized");
-        TextLangD(" ist initialisiert");
+        TEXTBASE_LANG_E(" is initialized");
+        TEXTBASE_LANG_D(" ist initialisiert");
     }
 }
 
@@ -40,8 +40,8 @@ String TextI2CBase::ModuleNotInitialized()
 {
     switch (GetLanguage())
     {
-        TextLangE(" is not initialized");
-        TextLangD(" ist nicht initialisiert");
+        TEXTBASE_LANG_E(" is not initialized");
+        TEXTBASE_LANG_D(" ist nicht initialisiert");
     }
 }
 

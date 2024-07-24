@@ -13,6 +13,7 @@
 // 04.05.2023: New functionality: binary dump - Stefan Rau
 // 04.05.2023: Writes single characters to output - Stefan Rau
 // 08.05.2023: Strict definitions for debug possibilities - Stefan Rau
+// 27.06.2024: Add boolean output - Stefan Rau
 
 #include "Debug.h"
 
@@ -85,6 +86,20 @@ void Debug::Print(char iOutput)
 	Serial.flush();
 }
 
+// void Debug::Print(bool iOutput)
+// {
+// 	if (iOutput)
+// 	{
+// 		Serial.print("true");
+// 	}
+// 	else
+// 	{
+// 		Serial.print("false");
+// 	}
+// 	// Wait until buffer is empty
+// 	Serial.flush();
+// }
+
 void Debug::PrintLn(String iOutput)
 {
 	Serial.println(iOutput);
@@ -101,10 +116,24 @@ void Debug::PrintLn(const Printable &iOutput)
 
 void Debug::PrintLn(char iOutput)
 {
-	Serial.print(iOutput);
+	Serial.println(iOutput);
 	// Wait until buffer is empty
 	Serial.flush();
 }
+
+// void Debug::PrintLn(bool iOutput)
+// {
+// 	if (iOutput)
+// 	{
+// 		Serial.println("true");
+// 	}
+// 	else
+// 	{
+// 		Serial.println("false");
+// 	}
+// 	// Wait until buffer is empty
+// 	Serial.flush();
+// }
 
 void Debug::BinaryDump(void *iData, size_t iLength)
 {

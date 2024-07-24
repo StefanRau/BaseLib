@@ -8,7 +8,6 @@
 #define _List_h
 
 #include <Arduino.h>
-#include "Debug.h"
 
 /// <summary>
 /// Class that contains a single list element. Base is a double chained list.
@@ -50,7 +49,7 @@ public:
 	/// </summary>
 	/// <param name="iIndex">Index of the object to delete</param>
 	/// <returns>True if element is sucessfully deleted</returns>
-	bool Delete(uint16_t iIndex);
+	bool Delete(int iIndex);
 
 	/// <summary>
 	/// Gets the 1st object of the list
@@ -69,7 +68,7 @@ public:
 	/// </summary>
 	/// <param name="iIndex">Index of the object to get</param>
 	/// <returns>Object to get</returns>
-	void *Get(uint16_t iIndex);
+	void *Get(int iIndex);
 
 	/// <summary>
 	/// Gets the object using a customer filter implementation
@@ -83,7 +82,9 @@ public:
 	/// In the other case, the user function returns false.
 	/// The 1st matching object is then returned by "Filter".
 	/// </remarks>
-	void *Filter(bool (*iCallback)(void *));
+	void *Filter(bool (*iCallback)(void *,void*));
+
+	void SetHostingElement(void *iHostingElement);
 
 	/// <summary>
 	/// Calculates the size of the object list
@@ -103,6 +104,8 @@ public:
 	void *Iterate(ListElement **iCurrentElement);
 
 private:
+	void *mHostingElement;
+
 	/// <summary>
 	/// Constructor
 	/// </summary>
@@ -117,8 +120,8 @@ private:
 	/// <param name="iIndex">Index of the object to get</param>
 	/// <param name="iCallback">Method that calculates filter criteria</param>
 	/// <returns>ListElement to get</returns>
-	ListElement *GetInternal(uint16_t iIndex);
-	ListElement *GetInternal(bool (*iCallback)(void *));
+	ListElement *GetInternal(int iIndex);
+	ListElement *GetInternal(bool (*iCallback)(void *,void*));
 };
 
 #endif
