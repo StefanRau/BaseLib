@@ -37,11 +37,11 @@ ListCollection::~ListCollection()
 	}
 }
 
-ListCollection *ListCollection::GetInstance()
-{
-	DEBUG_METHOD_CALL("ListCollection::GetInstance");
-	return new ListCollection();
-}
+// ListCollection *ListCollection::GetInstance()
+// {
+// 	DEBUG_METHOD_CALL("ListCollection::GetInstance");
+// 	return new ListCollection();
+// }
 
 bool ListCollection::Add(void *iObject)
 {

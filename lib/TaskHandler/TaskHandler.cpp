@@ -12,6 +12,7 @@
 // 21.12.2022: extend destructor - Stefan Rau
 // 28.12.2022: fix bug with timer interrupt for NANO 33 IOT - Stefan Rau
 // 16.07.2023: Use new capabilities of list processing - Stefan Rau
+// Todo: replace TimerInterrupt_Generic.h by an own implementation. The lib is too complex for only a timed interrupt.
 
 #include "TaskHandler.h"
 #include <Arduino.h>
@@ -71,7 +72,7 @@ TaskHandler::TaskHandler()
 {
 	DEBUG_INSTANTIATION("TaskHandler");
 
-	mTaskList = ListCollection::GetInstance();
+	mTaskList = new ListCollection();
 
 	// Initialize timer
 #ifdef ARDUINO_AVR_NANO_EVERY

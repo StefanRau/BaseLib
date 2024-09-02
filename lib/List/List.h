@@ -26,11 +26,16 @@ public:
 class ListCollection
 {
 public:
+	// /// <summary>
+	// /// Gets a new instance of this class.
+	// /// </summary>
+	// /// <returns>Instance of this class</returns>
+	// static ListCollection *GetInstance();
+
 	/// <summary>
-	/// Gets a new instance of this class.
+	/// Constructor
 	/// </summary>
-	/// <returns>Instance of this class</returns>
-	static ListCollection *GetInstance();
+	ListCollection();
 
 	/// <summary>
 	/// Destroyes all content.
@@ -105,11 +110,6 @@ public:
 
 private:
 	void *mHostingElement;
-
-	/// <summary>
-	/// Constructor
-	/// </summary>
-	ListCollection();
 
 	ListElement *mFirst = nullptr; // pointer to 1st element of the list
 	ListElement *mLast = nullptr;  // pointer to last element of the list
