@@ -50,7 +50,7 @@ bool RemoteControl::Available()
     lChar = Serial.read();
 
     // If end of string is already detected, all further receipts are ignored
-    if (mEndDetected | mOverflowDetected)
+    if (mEndDetected || mOverflowDetected)
     {
         return true;
     }
