@@ -10,16 +10,18 @@
 #include "List.h"
 #include "Debug.h"
 
-#if DEBUG_APPLICATION > 0
-#define TIMER_INTERRUPT_DEBUG 3
-#define _TIMERINTERRUPT_LOGLEVEL_ 3
-#define LOCAL_DEBUG 0
-#include "TimerInterrupt_Generic_Debug.h"
-#else
-#define TIMER_INTERRUPT_DEBUG 0
-#define _TIMERINTERRUPT_LOGLEVEL_ 0
-#define LOCAL_DEBUG 0
-#endif
+// #if DEBUG_APPLICATION > 0
+// #define TIMER_INTERRUPT_DEBUG 3
+// #define _TIMERINTERRUPT_LOGLEVEL_ 3
+// #define LOCAL_DEBUG 0
+// #include "TimerInterrupt_Generic_Debug.h"
+// #else
+// #define TIMER_INTERRUPT_DEBUG 0
+// #define _TIMERINTERRUPT_LOGLEVEL_ 0
+// #define LOCAL_DEBUG 0
+// #endif
+
+void TaskDispatcher();
 
 /// <summary>
 /// Class that contains a single list task.

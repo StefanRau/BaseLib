@@ -28,6 +28,8 @@
 class ProjectBase
 {
 public:
+	const unsigned char cNullSetting = 255; // There is either no setting in EEPROM or no EEPROM defined
+
 #if DEBUG_APPLICATION == 0
 	// Global commands for remote control
 	enum class eFunctionCode : char
@@ -37,8 +39,6 @@ public:
 		TReturnUnknown = '?'		// return of "unknown"
 	};
 #endif
-
-	const unsigned char cNullSetting = 255; // There is either no setting in EEPROM or no EEPROM defined
 
 #ifdef EXTERNAL_EEPROM
 	/// <summary>
