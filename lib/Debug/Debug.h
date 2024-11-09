@@ -12,7 +12,7 @@
 #endif
 
 #if DEBUG_APPLICATION <= 0
-#define DEBUG_START(Text)
+#define DEBUG_START(Number)
 #define DEBUG_PRINT(Text)
 #define DEBUG_PRINT_LN(Text)
 #define DEBUG_LOOP()
@@ -24,7 +24,7 @@
 #endif
 
 #if DEBUG_APPLICATION == 1
-#define DEBUG_START(Text) Debug::GetInstance(Text)
+#define DEBUG_START(Number) Debug::GetInstance(Number)
 #define DEBUG_PRINT(Text) Debug::GetInstance()->Print(Text)
 #define DEBUG_PRINT_LN(Text) Debug::GetInstance()->PrintLn(Text)
 #define DEBUG_LOOP() Debug::GetInstance()->loop()
@@ -36,7 +36,7 @@
 #endif
 
 #if DEBUG_APPLICATION == 2
-#define DEBUG_START(Text) Debug::GetInstance(Text)
+#define DEBUG_START(Number) Debug::GetInstance(Number)
 #define DEBUG_PRINT(Text) Debug::GetInstance()->Print(Text)
 #define DEBUG_PRINT_LN(Text) Debug::GetInstance()->PrintLn(Text)
 #define DEBUG_LOOP() Debug::GetInstance()->loop()
@@ -48,7 +48,7 @@
 #endif
 
 #if DEBUG_APPLICATION >= 3
-#define DEBUG_START(Text) Debug::GetInstance(Text)
+#define DEBUG_START(Number) Debug::GetInstance(Number)
 #define DEBUG_PRINT(Text) Debug::GetInstance()->Print(Text)
 #define DEBUG_PRINT_LN(Text) Debug::GetInstance()->PrintLn(Text)
 #define DEBUG_LOOP() Debug::GetInstance()->loop()
