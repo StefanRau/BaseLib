@@ -62,6 +62,7 @@
 #if DEBUG_APPLICATION > 0
 
 #include <Arduino.h>
+#include <Printable.h>
 
 /// <summary>
 /// Enables output of text via serial interface if debugging is not simply possible on that device

@@ -56,6 +56,13 @@ public:
 	/// <returns>True if element is sucessfully deleted</returns>
 	bool Delete(int iIndex);
 
+		/// <summary>
+	/// Deletes an object from the list
+	/// </summary>
+	/// <param name="lIterator">Object that shall be deleted</param>
+	/// <returns>True if element is sucessfully deleted</returns>
+	bool Delete(ListElement *iCurrentElement);
+
 	/// <summary>
 	/// Gets the 1st object of the list
 	/// </summary>

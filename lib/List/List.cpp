@@ -37,12 +37,6 @@ ListCollection::~ListCollection()
 	}
 }
 
-// ListCollection *ListCollection::GetInstance()
-// {
-// 	DEBUG_METHOD_CALL("ListCollection::GetInstance");
-// 	return new ListCollection();
-// }
-
 bool ListCollection::Add(void *iObject)
 {
 	DEBUG_METHOD_CALL("ListCollection::Add");
@@ -74,6 +68,72 @@ bool ListCollection::Add(void *iObject)
 	return true;
 }
 
+bool ListCollection::Delete(ListElement *iCurrentElement)
+{
+	DEBUG_METHOD_CALL("ListCollection::Delete");
+
+	if (iCurrentElement == nullptr)
+	{
+		// If the element does not exist
+		return false;
+	}
+
+	// Process one and only element
+	if ((iCurrentElement->mPrevious == nullptr) && (iCurrentElement->mNext == nullptr))
+	{
+		mFirst = nullptr;
+		mLast = nullptr;
+	}
+
+	// Adapt the element before
+	if (iCurrentElement->mPrevious != nullptr)
+	{
+		// If a predecessor exists
+
+		if (iCurrentElement->mNext == nullptr)
+		{
+			// the current element is the last one => make entry before the last one
+			iCurrentElement->mPrevious->mNext = nullptr;
+			// Take the previous element as last one
+			mLast = iCurrentElement->mPrevious;
+		}
+		else
+		{
+			// If a successor exists => entry before points to the successor of the current entry
+			iCurrentElement->mPrevious->mNext = iCurrentElement->mNext;
+		}
+	}
+
+	// Adapt the element after
+	if (iCurrentElement->mNext != nullptr)
+	{
+		// If a successor exists
+
+		if (iCurrentElement->mPrevious == nullptr)
+		{
+			// the current element is the 1st one => make entry after the 1st one
+			iCurrentElement->mNext->mPrevious = nullptr;
+			// Take the next element as 1st one
+			mFirst = iCurrentElement->mNext;
+		}
+		else
+		{
+			// If a predecessor exists => entry after points to the predecessor of the current entry
+			iCurrentElement->mNext->mPrevious = iCurrentElement->mPrevious;
+		}
+	}
+
+	// Rempove current element from memory
+	if (iCurrentElement->mObject != nullptr)
+	{
+		delete iCurrentElement->mObject;
+	}
+
+	delete iCurrentElement;
+	DEBUG_PRINT_LN("Entry deleted from ListCollection");
+	return true;
+}
+
 bool ListCollection::Delete(int iIndex)
 {
 	DEBUG_METHOD_CALL("ListCollection::Delete");
@@ -81,67 +141,7 @@ bool ListCollection::Delete(int iIndex)
 	ListElement *lIterator;
 
 	lIterator = GetInternal(iIndex);
-
-	if (lIterator == nullptr)
-	{
-		// If the element does not exist
-		return false;
-	}
-
-	// Process one and only element
-	if ((lIterator->mPrevious == nullptr) && (lIterator->mNext == nullptr))
-	{
-		mFirst = nullptr;
-		mLast = nullptr;
-	}
-
-	// Adapt the element before
-	if (lIterator->mPrevious != nullptr)
-	{
-		// If a predecessor exists
-
-		if (lIterator->mNext == nullptr)
-		{
-			// the current element is the last one => make entry before the last one
-			lIterator->mPrevious->mNext = nullptr;
-			// Take the previous element as last one
-			mLast = lIterator->mPrevious;
-		}
-		else
-		{
-			// If a successor exists => entry before points to the successor of the current entry
-			lIterator->mPrevious->mNext = lIterator->mNext;
-		}
-	}
-
-	// Adapt the element after
-	if (lIterator->mNext != nullptr)
-	{
-		// If a successor exists
-
-		if (lIterator->mPrevious == nullptr)
-		{
-			// the current element is the 1st one => make entry after the 1st one
-			lIterator->mNext->mPrevious = nullptr;
-			// Take the next element as 1st one
-			mFirst = lIterator->mNext;
-		}
-		else
-		{
-			// If a predecessor exists => entry after points to the predecessor of the current entry
-			lIterator->mNext->mPrevious = lIterator->mPrevious;
-		}
-	}
-
-	// Rempove current element from memory
-	if (lIterator->mObject != nullptr)
-	{
-		delete lIterator->mObject;
-	}
-
-	delete lIterator;
-	DEBUG_PRINT_LN("Entry " + String(iIndex) + " deleted from ListCollection");
-	return true;
+	return Delete(lIterator);
 }
 
 void *ListCollection::GetFirst()
@@ -233,7 +233,6 @@ uint16_t ListCollection::Count()
 ListElement *ListCollection::IterateStart()
 {
 	DEBUG_METHOD_CALL("ListCollection::IterateStart");
-
 	return mFirst;
 }
 
