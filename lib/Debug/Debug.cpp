@@ -13,7 +13,7 @@
 // 04.05.2023: New functionality: binary dump - Stefan Rau
 // 04.05.2023: Writes single characters to output - Stefan Rau
 // 08.05.2023: Strict definitions for debug possibilities - Stefan Rau
-// 27.06.2024: Add boolean output - Stefan Rau
+// 27.06.2024: Add boolean output / not active, because shown text is language dependent - Stefan Rau
 
 #include "Debug.h"
 
